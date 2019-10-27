@@ -5,13 +5,13 @@ EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
 Sheet 3 3
-Title ""
+Title "Laser Scanning Projector"
 Date ""
-Rev ""
-Comp ""
-Comment1 ""
-Comment2 ""
-Comment3 ""
+Rev "v0.1"
+Comp "ELEC 3300 Group 26"
+Comment1 "Licensed under Creative Commons Attribution-ShareAlike 4.0 International"
+Comment2 "Mak Ching Hang David ( 20389036 )"
+Comment3 "Wai Paulo Valerio Wang ( 20432417 )"
 Comment4 ""
 $EndDescr
 $Comp

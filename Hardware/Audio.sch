@@ -9,9 +9,9 @@ Title "Laser Scanning Projector"
 Date ""
 Rev "v0.1"
 Comp "ELEC 3300 Group 26"
-Comment1 "Mak Ching Hang David ( 20389036 )"
-Comment2 "Wai Paulo Valerio Wang ( 20432417 )"
-Comment3 ""
+Comment1 "Licensed under Creative Commons Attribution-ShareAlike 4.0 International"
+Comment2 "Mak Ching Hang David ( 20389036 )"
+Comment3 "Wai Paulo Valerio Wang ( 20432417 )"
 Comment4 ""
 $EndDescr
 Wire Notes Line
