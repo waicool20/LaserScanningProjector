@@ -1,0 +1,451 @@
+EESchema Schematic File Version 4
+LIBS:LaserScanningProjector-cache
+EELAYER 30 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 3 3
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L Device:Q_NMOS_GSD Q?
+U 1 1 5DC65276
+P 2700 3650
+AR Path="/5DC65276" Ref="Q?"  Part="1" 
+AR Path="/5DC5E93E/5DC65276" Ref="Q1"  Part="1" 
+F 0 "Q1" H 2906 3696 50  0000 L CNN
+F 1 "Si2300" H 2906 3605 50  0000 L CNN
+F 2 "Package_TO_SOT_SMD:SOT-23" H 2900 3750 50  0001 C CNN
+F 3 "~" H 2700 3650 50  0001 C CNN
+	1    2700 3650
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector:Screw_Terminal_01x04 J?
+U 1 1 5DC6527C
+P 4050 3100
+AR Path="/5DC6527C" Ref="J?"  Part="1" 
+AR Path="/5DC5E93E/5DC6527C" Ref="J9"  Part="1" 
+F 0 "J9" H 4130 3092 50  0000 L CNN
+F 1 "MOTOR_X" H 4130 3001 50  0000 L CNN
+F 2 "Connector_Phoenix_MSTB:PhoenixContact_MSTBA_2,5_4-G-5,08_1x04_P5.08mm_Horizontal" H 4050 3100 50  0001 C CNN
+F 3 "~" H 4050 3100 50  0001 C CNN
+	1    4050 3100
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+5V #PWR?
+U 1 1 5DC65282
+P 3750 2800
+AR Path="/5DC65282" Ref="#PWR?"  Part="1" 
+AR Path="/5DC5E93E/5DC65282" Ref="#PWR046"  Part="1" 
+F 0 "#PWR046" H 3750 2650 50  0001 C CNN
+F 1 "+5V" H 3765 2973 50  0000 C CNN
+F 2 "" H 3750 2800 50  0001 C CNN
+F 3 "" H 3750 2800 50  0001 C CNN
+	1    3750 2800
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3750 3000 3850 3000
+Wire Wire Line
+	3750 2800 3750 3000
+$Comp
+L Device:R R?
+U 1 1 5DC6528A
+P 2800 3250
+AR Path="/5DC6528A" Ref="R?"  Part="1" 
+AR Path="/5DC5E93E/5DC6528A" Ref="R20"  Part="1" 
+F 0 "R20" H 2870 3296 50  0000 L CNN
+F 1 "470" H 2870 3205 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" V 2730 3250 50  0001 C CNN
+F 3 "~" H 2800 3250 50  0001 C CNN
+	1    2800 3250
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:Q_NMOS_GSD Q?
+U 1 1 5DC65290
+P 3200 4200
+AR Path="/5DC65290" Ref="Q?"  Part="1" 
+AR Path="/5DC5E93E/5DC65290" Ref="Q2"  Part="1" 
+F 0 "Q2" H 3406 4246 50  0000 L CNN
+F 1 "Si2300" H 3406 4155 50  0000 L CNN
+F 2 "Package_TO_SOT_SMD:SOT-23" H 3400 4300 50  0001 C CNN
+F 3 "~" H 3200 4200 50  0001 C CNN
+	1    3200 4200
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:Q_NMOS_GSD Q?
+U 1 1 5DC65296
+P 3700 4750
+AR Path="/5DC65296" Ref="Q?"  Part="1" 
+AR Path="/5DC5E93E/5DC65296" Ref="Q3"  Part="1" 
+F 0 "Q3" H 3906 4796 50  0000 L CNN
+F 1 "Si2300" H 3906 4705 50  0000 L CNN
+F 2 "Package_TO_SOT_SMD:SOT-23" H 3900 4850 50  0001 C CNN
+F 3 "~" H 3700 4750 50  0001 C CNN
+	1    3700 4750
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5DC6529C
+P 3300 3800
+AR Path="/5DC6529C" Ref="R?"  Part="1" 
+AR Path="/5DC5E93E/5DC6529C" Ref="R21"  Part="1" 
+F 0 "R21" H 3370 3846 50  0000 L CNN
+F 1 "470" H 3370 3755 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" V 3230 3800 50  0001 C CNN
+F 3 "~" H 3300 3800 50  0001 C CNN
+	1    3300 3800
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5DC652A2
+P 3800 4350
+AR Path="/5DC652A2" Ref="R?"  Part="1" 
+AR Path="/5DC5E93E/5DC652A2" Ref="R22"  Part="1" 
+F 0 "R22" H 3870 4396 50  0000 L CNN
+F 1 "470" H 3870 4305 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" V 3730 4350 50  0001 C CNN
+F 3 "~" H 3800 4350 50  0001 C CNN
+	1    3800 4350
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 5DC652A8
+P 2800 3900
+AR Path="/5DC652A8" Ref="#PWR?"  Part="1" 
+AR Path="/5DC5E93E/5DC652A8" Ref="#PWR044"  Part="1" 
+F 0 "#PWR044" H 2800 3650 50  0001 C CNN
+F 1 "GND" H 2805 3727 50  0000 C CNN
+F 2 "" H 2800 3900 50  0001 C CNN
+F 3 "" H 2800 3900 50  0001 C CNN
+	1    2800 3900
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2800 3850 2800 3900
+$Comp
+L power:GND #PWR?
+U 1 1 5DC652AF
+P 3300 4450
+AR Path="/5DC652AF" Ref="#PWR?"  Part="1" 
+AR Path="/5DC5E93E/5DC652AF" Ref="#PWR045"  Part="1" 
+F 0 "#PWR045" H 3300 4200 50  0001 C CNN
+F 1 "GND" H 3305 4277 50  0000 C CNN
+F 2 "" H 3300 4450 50  0001 C CNN
+F 3 "" H 3300 4450 50  0001 C CNN
+	1    3300 4450
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3300 4400 3300 4450
+$Comp
+L power:GND #PWR?
+U 1 1 5DC652B6
+P 3800 5000
+AR Path="/5DC652B6" Ref="#PWR?"  Part="1" 
+AR Path="/5DC5E93E/5DC652B6" Ref="#PWR047"  Part="1" 
+F 0 "#PWR047" H 3800 4750 50  0001 C CNN
+F 1 "GND" H 3805 4827 50  0000 C CNN
+F 2 "" H 3800 5000 50  0001 C CNN
+F 3 "" H 3800 5000 50  0001 C CNN
+	1    3800 5000
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3800 4950 3800 5000
+Wire Wire Line
+	2800 3450 2800 3400
+Wire Wire Line
+	3300 3950 3300 4000
+Wire Wire Line
+	3800 4500 3800 4550
+Wire Wire Line
+	2800 3100 3850 3100
+Wire Wire Line
+	3300 3200 3850 3200
+Wire Wire Line
+	3850 3300 3800 3300
+Wire Wire Line
+	3800 3300 3800 4200
+Wire Wire Line
+	3300 3200 3300 3650
+$Comp
+L Device:Q_NMOS_GSD Q?
+U 1 1 5DC652C8
+P 4950 3650
+AR Path="/5DC652C8" Ref="Q?"  Part="1" 
+AR Path="/5DC5E93E/5DC652C8" Ref="Q4"  Part="1" 
+F 0 "Q4" H 5156 3696 50  0000 L CNN
+F 1 "Si2300" H 5156 3605 50  0000 L CNN
+F 2 "Package_TO_SOT_SMD:SOT-23" H 5150 3750 50  0001 C CNN
+F 3 "~" H 4950 3650 50  0001 C CNN
+	1    4950 3650
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector:Screw_Terminal_01x04 J?
+U 1 1 5DC652CE
+P 6300 3100
+AR Path="/5DC652CE" Ref="J?"  Part="1" 
+AR Path="/5DC5E93E/5DC652CE" Ref="J10"  Part="1" 
+F 0 "J10" H 6380 3092 50  0000 L CNN
+F 1 "MOTOR_Y" H 6380 3001 50  0000 L CNN
+F 2 "Connector_Phoenix_MSTB:PhoenixContact_MSTBA_2,5_4-G-5,08_1x04_P5.08mm_Horizontal" H 6300 3100 50  0001 C CNN
+F 3 "~" H 6300 3100 50  0001 C CNN
+	1    6300 3100
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+5V #PWR?
+U 1 1 5DC652D4
+P 6000 2800
+AR Path="/5DC652D4" Ref="#PWR?"  Part="1" 
+AR Path="/5DC5E93E/5DC652D4" Ref="#PWR050"  Part="1" 
+F 0 "#PWR050" H 6000 2650 50  0001 C CNN
+F 1 "+5V" H 6015 2973 50  0000 C CNN
+F 2 "" H 6000 2800 50  0001 C CNN
+F 3 "" H 6000 2800 50  0001 C CNN
+	1    6000 2800
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6000 3000 6100 3000
+Wire Wire Line
+	6000 2800 6000 3000
+$Comp
+L Device:R R?
+U 1 1 5DC652DC
+P 5050 3250
+AR Path="/5DC652DC" Ref="R?"  Part="1" 
+AR Path="/5DC5E93E/5DC652DC" Ref="R23"  Part="1" 
+F 0 "R23" H 5120 3296 50  0000 L CNN
+F 1 "470" H 5120 3205 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" V 4980 3250 50  0001 C CNN
+F 3 "~" H 5050 3250 50  0001 C CNN
+	1    5050 3250
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:Q_NMOS_GSD Q?
+U 1 1 5DC652E2
+P 5450 4200
+AR Path="/5DC652E2" Ref="Q?"  Part="1" 
+AR Path="/5DC5E93E/5DC652E2" Ref="Q5"  Part="1" 
+F 0 "Q5" H 5656 4246 50  0000 L CNN
+F 1 "Si2300" H 5656 4155 50  0000 L CNN
+F 2 "Package_TO_SOT_SMD:SOT-23" H 5650 4300 50  0001 C CNN
+F 3 "~" H 5450 4200 50  0001 C CNN
+	1    5450 4200
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:Q_NMOS_GSD Q?
+U 1 1 5DC652E8
+P 5950 4750
+AR Path="/5DC652E8" Ref="Q?"  Part="1" 
+AR Path="/5DC5E93E/5DC652E8" Ref="Q6"  Part="1" 
+F 0 "Q6" H 6156 4796 50  0000 L CNN
+F 1 "Si2300" H 6156 4705 50  0000 L CNN
+F 2 "Package_TO_SOT_SMD:SOT-23" H 6150 4850 50  0001 C CNN
+F 3 "~" H 5950 4750 50  0001 C CNN
+	1    5950 4750
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5DC652EE
+P 5550 3800
+AR Path="/5DC652EE" Ref="R?"  Part="1" 
+AR Path="/5DC5E93E/5DC652EE" Ref="R24"  Part="1" 
+F 0 "R24" H 5620 3846 50  0000 L CNN
+F 1 "470" H 5620 3755 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" V 5480 3800 50  0001 C CNN
+F 3 "~" H 5550 3800 50  0001 C CNN
+	1    5550 3800
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5DC652F4
+P 6050 4350
+AR Path="/5DC652F4" Ref="R?"  Part="1" 
+AR Path="/5DC5E93E/5DC652F4" Ref="R25"  Part="1" 
+F 0 "R25" H 6120 4396 50  0000 L CNN
+F 1 "470" H 6120 4305 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" V 5980 4350 50  0001 C CNN
+F 3 "~" H 6050 4350 50  0001 C CNN
+	1    6050 4350
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 5DC652FA
+P 5050 3900
+AR Path="/5DC652FA" Ref="#PWR?"  Part="1" 
+AR Path="/5DC5E93E/5DC652FA" Ref="#PWR048"  Part="1" 
+F 0 "#PWR048" H 5050 3650 50  0001 C CNN
+F 1 "GND" H 5055 3727 50  0000 C CNN
+F 2 "" H 5050 3900 50  0001 C CNN
+F 3 "" H 5050 3900 50  0001 C CNN
+	1    5050 3900
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5050 3850 5050 3900
+$Comp
+L power:GND #PWR?
+U 1 1 5DC65301
+P 5550 4450
+AR Path="/5DC65301" Ref="#PWR?"  Part="1" 
+AR Path="/5DC5E93E/5DC65301" Ref="#PWR049"  Part="1" 
+F 0 "#PWR049" H 5550 4200 50  0001 C CNN
+F 1 "GND" H 5555 4277 50  0000 C CNN
+F 2 "" H 5550 4450 50  0001 C CNN
+F 3 "" H 5550 4450 50  0001 C CNN
+	1    5550 4450
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5550 4400 5550 4450
+$Comp
+L power:GND #PWR?
+U 1 1 5DC65308
+P 6050 5000
+AR Path="/5DC65308" Ref="#PWR?"  Part="1" 
+AR Path="/5DC5E93E/5DC65308" Ref="#PWR051"  Part="1" 
+F 0 "#PWR051" H 6050 4750 50  0001 C CNN
+F 1 "GND" H 6055 4827 50  0000 C CNN
+F 2 "" H 6050 5000 50  0001 C CNN
+F 3 "" H 6050 5000 50  0001 C CNN
+	1    6050 5000
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6050 4950 6050 5000
+Wire Wire Line
+	5050 3450 5050 3400
+Wire Wire Line
+	5550 3950 5550 4000
+Wire Wire Line
+	6050 4500 6050 4550
+Wire Wire Line
+	5050 3100 6100 3100
+Wire Wire Line
+	5550 3200 6100 3200
+Wire Wire Line
+	6100 3300 6050 3300
+Wire Wire Line
+	6050 3300 6050 4200
+Wire Wire Line
+	5550 3200 5550 3650
+Wire Notes Line
+	2100 2550 2100 5250
+Wire Notes Line
+	2100 5250 6800 5250
+Wire Notes Line
+	6800 5250 6800 2500
+Wire Notes Line
+	6800 2500 2400 2500
+Text Notes 2100 2550 0    50   ~ 0
+Motors
+$Comp
+L Device:Q_NMOS_GSD Q?
+U 1 1 5DC6CC5B
+P 8100 3900
+AR Path="/5DC6CC5B" Ref="Q?"  Part="1" 
+AR Path="/5DC5E93E/5DC6CC5B" Ref="Q7"  Part="1" 
+F 0 "Q7" H 8300 3900 50  0000 L CNN
+F 1 "Si2300" H 8250 3800 50  0000 L CNN
+F 2 "Package_TO_SOT_SMD:SOT-23" H 8300 4000 50  0001 C CNN
+F 3 "~" H 8100 3900 50  0001 C CNN
+	1    8100 3900
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector:Screw_Terminal_01x02 J?
+U 1 1 5DC6CC61
+P 8450 3550
+AR Path="/5DC6CC61" Ref="J?"  Part="1" 
+AR Path="/5DC5E93E/5DC6CC61" Ref="J11"  Part="1" 
+F 0 "J11" H 8450 3750 50  0000 L CNN
+F 1 "LASER" H 8300 3650 50  0000 L CNN
+F 2 "Connector_JST:JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical" H 8450 3550 50  0001 C CNN
+F 3 "~" H 8450 3550 50  0001 C CNN
+	1    8450 3550
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+3V3 #PWR?
+U 1 1 5DC6CC67
+P 8200 3500
+AR Path="/5DC6CC67" Ref="#PWR?"  Part="1" 
+AR Path="/5DC5E93E/5DC6CC67" Ref="#PWR052"  Part="1" 
+F 0 "#PWR052" H 8200 3350 50  0001 C CNN
+F 1 "+3V3" H 8215 3673 50  0000 C CNN
+F 2 "" H 8200 3500 50  0001 C CNN
+F 3 "" H 8200 3500 50  0001 C CNN
+	1    8200 3500
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	8200 3500 8200 3550
+Wire Wire Line
+	8200 3550 8250 3550
+Wire Wire Line
+	8250 3650 8200 3650
+Wire Wire Line
+	8200 3650 8200 3700
+$Comp
+L power:GND #PWR?
+U 1 1 5DC6CC71
+P 8200 4150
+AR Path="/5DC6CC71" Ref="#PWR?"  Part="1" 
+AR Path="/5DC5E93E/5DC6CC71" Ref="#PWR053"  Part="1" 
+F 0 "#PWR053" H 8200 3900 50  0001 C CNN
+F 1 "GND" H 8205 3977 50  0000 C CNN
+F 2 "" H 8200 4150 50  0001 C CNN
+F 3 "" H 8200 4150 50  0001 C CNN
+	1    8200 4150
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	8200 4150 8200 4100
+Text GLabel 7900 3900 0    50   Input ~ 0
+LASER_PWM
+Wire Notes Line
+	8600 3200 8600 4400
+Wire Notes Line
+	8600 4400 7300 4400
+Wire Notes Line
+	7300 4400 7300 3250
+Wire Notes Line
+	8600 3200 7550 3200
+Text Notes 7300 3250 0    50   ~ 0
+Laser
+Text HLabel 2500 3650 0    50   Input ~ 0
+X_STEP
+Text HLabel 3000 4200 0    50   Input ~ 0
+X_DIR
+Text HLabel 3500 4750 0    50   Input ~ 0
+X_EN
+Text HLabel 4750 3650 0    50   Input ~ 0
+Y_STEP
+Text HLabel 5250 4200 0    50   Input ~ 0
+Y_DIR
+Text HLabel 5750 4750 0    50   Input ~ 0
+Y_EN
+$EndSCHEMATC
