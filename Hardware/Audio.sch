@@ -7,7 +7,7 @@ encoding utf-8
 Sheet 2 3
 Title "Laser Scanning Projector"
 Date ""
-Rev "v0.1"
+Rev "v1.0"
 Comp "ELEC 3300 Group 26"
 Comment1 "Licensed under Creative Commons Attribution-ShareAlike 4.0 International"
 Comment2 "Mak Ching Hang David ( 20389036 )"

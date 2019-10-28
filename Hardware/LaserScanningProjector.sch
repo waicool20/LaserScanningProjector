@@ -7,7 +7,7 @@ encoding utf-8
 Sheet 1 3
 Title "Laser Scanning Projector"
 Date ""
-Rev "v0.1"
+Rev "v1.0"
 Comp "ELEC 3300 Group 26"
 Comment1 "Licensed under Creative Commons Attribution-ShareAlike 4.0 International"
 Comment2 "Mak Ching Hang David ( 20389036 )"
@@ -849,8 +849,6 @@ Text GLabel 5500 1800 0    50   Input ~ 0
 DISPLAY_CS
 Text GLabel 5500 1400 0    50   Input ~ 0
 DISPLAY_SCK
-Text GLabel 5600 750  0    50   Input ~ 0
-DISPLAY_MISO
 Text GLabel 5500 1500 0    50   Input ~ 0
 DISPLAY_MOSI
 Text GLabel 5500 1700 0    50   Input ~ 0
@@ -1446,9 +1444,6 @@ F 3 "~" H 1850 5850 50  0001 C CNN
 	1    1850 5850
 	1    0    0    -1  
 $EndComp
-NoConn ~ 5700 750 
-Wire Wire Line
-	5700 750  5600 750 
 $Comp
 L Connector_Generic:Conn_01x08 J5
 U 1 1 5DFCE40F

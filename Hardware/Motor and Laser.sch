@@ -7,7 +7,7 @@ encoding utf-8
 Sheet 3 3
 Title "Laser Scanning Projector"
 Date ""
-Rev "v0.1"
+Rev "v1.0"
 Comp "ELEC 3300 Group 26"
 Comment1 "Licensed under Creative Commons Attribution-ShareAlike 4.0 International"
 Comment2 "Mak Ching Hang David ( 20389036 )"
@@ -388,19 +388,6 @@ F 3 "~" H 8450 3550 50  0001 C CNN
 	1    8450 3550
 	1    0    0    -1  
 $EndComp
-$Comp
-L power:+3V3 #PWR?
-U 1 1 5DC6CC67
-P 8200 3500
-AR Path="/5DC6CC67" Ref="#PWR?"  Part="1" 
-AR Path="/5DC5E93E/5DC6CC67" Ref="#PWR052"  Part="1" 
-F 0 "#PWR052" H 8200 3350 50  0001 C CNN
-F 1 "+3V3" H 8215 3673 50  0000 C CNN
-F 2 "" H 8200 3500 50  0001 C CNN
-F 3 "" H 8200 3500 50  0001 C CNN
-	1    8200 3500
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	8200 3500 8200 3550
 Wire Wire Line
@@ -448,4 +435,15 @@ Text HLabel 5250 4200 0    50   Input ~ 0
 Y_DIR
 Text HLabel 5750 4750 0    50   Input ~ 0
 Y_EN
+$Comp
+L power:+5V #PWR?
+U 1 1 5DB64A83
+P 8200 3500
+F 0 "#PWR?" H 8200 3350 50  0001 C CNN
+F 1 "+5V" H 8215 3673 50  0000 C CNN
+F 2 "" H 8200 3500 50  0001 C CNN
+F 3 "" H 8200 3500 50  0001 C CNN
+	1    8200 3500
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC
