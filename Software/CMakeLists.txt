@@ -34,7 +34,7 @@ set(ADDITIONAL_LINKER_FLAGS
 message("----------------------------------------")
 
 add_executable(${PROJECT_NAME}.elf
-        src/main.cpp)
+        src/main.cpp src/drivers/Motor.cpp)
 add_dependencies(${PROJECT_NAME}.elf libopencm3-genlink)
 target_compile_options(${PROJECT_NAME}.elf PRIVATE
         ${TARGET_SPECIFIC_FLAGS}

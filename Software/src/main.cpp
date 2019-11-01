@@ -2,6 +2,7 @@
 
 #include <libopencm3/stm32/gpio.h>
 #include <libopencm3/stm32/rcc.h>
+#include <drivers/Motor.h>
 
 namespace {
 void gpio_setup() {
@@ -12,6 +13,18 @@ void gpio_setup() {
 }  // namespace
 
 int main() {
+  rcc_periph_clock_enable(RCC_GPIOA);
+  rcc_periph_clock_enable(RCC_GPIOB);
+  Motor motorX{
+      PortPin{GPIOB, GPIO7},
+      PortPin{GPIOB, GPIO6},
+      PortPin{GPIOB, GPIO5}
+  };
+  Motor motorY{
+      PortPin{GPIOB, GPIO4},
+      PortPin{GPIOB, GPIO3},
+      PortPin{GPIOA, GPIO15}
+  };
   gpio_setup();
 
   gpio_set(GPIOA, GPIO9);
