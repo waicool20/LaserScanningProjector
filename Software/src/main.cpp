@@ -2,20 +2,37 @@
 
 #include <libopencm3/stm32/gpio.h>
 #include <libopencm3/stm32/rcc.h>
-#include <drivers/Motor.h>
+
+//#include "drivers/Motor.h"
+#include "drivers/stepper_motor.h"
+#include "lib/rcc.h"
+#include "lib/systick.h"
 
 namespace {
-void gpio_setup() {
-  rcc_periph_clock_enable(RCC_GPIOE);
-
-  gpio_mode_setup(GPIOA, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GPIO9 | GPIO10);
+void rcc_setup() {
+  rcc::periph_clock_enable(RCC_GPIOA);
+  rcc::periph_clock_enable(RCC_GPIOB);
+  rcc::periph_clock_enable(RCC_GPIOE);
 }
 }  // namespace
 
 int main() {
-  rcc_periph_clock_enable(RCC_GPIOA);
-  rcc_periph_clock_enable(RCC_GPIOB);
-  Motor motorX{
+  rcc::clock_setup_pll(rcc_hse8mhz_configs[RCC_CLOCK_HSE8_72MHZ]);
+
+  systick::init();
+
+  rcc_setup();
+
+  stepper_motor motor_x(
+      gpio(GPIOB, GPIO7),
+      gpio(GPIOB, GPIO6),
+      gpio(GPIOB, GPIO5));
+  stepper_motor motor_y(
+      gpio(GPIOB, GPIO4),
+      gpio(GPIOB, GPIO3),
+      gpio(GPIOA, GPIO15));
+
+  /*Motor motorX{
       PortPin{GPIOB, GPIO7},
       PortPin{GPIOB, GPIO6},
       PortPin{GPIOB, GPIO5}
@@ -24,13 +41,17 @@ int main() {
       PortPin{GPIOB, GPIO4},
       PortPin{GPIOB, GPIO3},
       PortPin{GPIOA, GPIO15}
-  };
-  gpio_setup();
+  };*/
 
-  gpio_set(GPIOA, GPIO9);
+  gpio led1(GPIOA, GPIO9);
+  gpio led2(GPIOA, GPIO10);
+
+  led1.state(true);
 
   while (true) {
-    gpio_toggle(GPIOE, GPIO9 | GPIO10);  // LED on/off
+    led1.toggle();
+    led2.toggle();
+
     for (std::size_t i = 0; i < 2'000'000; i++) {
       __asm__("nop");
     }
