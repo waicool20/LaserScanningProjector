@@ -3,7 +3,6 @@
 #include <libopencm3/stm32/gpio.h>
 #include <libopencm3/stm32/rcc.h>
 
-//#include "drivers/Motor.h"
 #include "drivers/stepper_motor.h"
 #include "lib/rcc.h"
 #include "lib/systick.h"

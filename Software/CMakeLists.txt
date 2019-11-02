@@ -36,7 +36,6 @@ message("----------------------------------------")
 add_executable(${PROJECT_NAME}.elf
         src/main.cpp
 
-        src/drivers/Motor.cpp
         src/drivers/stepper_motor.cpp
 
         src/lib/gpio.cpp
