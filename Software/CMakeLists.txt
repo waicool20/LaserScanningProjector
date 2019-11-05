@@ -70,3 +70,9 @@ add_custom_command(
         POST_BUILD
         COMMAND ${ARM_SIZE} "${PROJECT_NAME}.elf"
 )
+
+add_custom_target(
+        FlashElf
+        COMMAND arm-none-eabi-gdb -q -ex "set confirm off" -ex "target extended-remote :3333" -ex "load" -ex "kill" -ex "quit" ${PROJECT_NAME}.elf
+        DEPENDS ${PROJECT_NAME}.elf
+)
