@@ -8,6 +8,10 @@ void gpio::output_opts(std::uint8_t otype, std::uint8_t speed) {
   gpio_set_output_options(port, otype, speed, pin);
 }
 
+void gpio::set_af(uint8_t af_num) {
+  gpio_set_af(port, af_num, pin);
+}
+
 void gpio::state(bool new_state) {
   if (new_state) {
     gpio_set(port, pin);
