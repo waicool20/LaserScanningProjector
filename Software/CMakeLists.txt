@@ -36,6 +36,7 @@ message("----------------------------------------")
 add_executable(${PROJECT_NAME}.elf
         src/main.cpp
 
+        src/drivers/st7735s.cpp
         src/drivers/stepper_motor.cpp
 
         src/lib/gpio.cpp
@@ -68,4 +69,10 @@ add_custom_command(
         TARGET ${PROJECT_NAME}.elf
         POST_BUILD
         COMMAND ${ARM_SIZE} "${PROJECT_NAME}.elf"
+)
+
+add_custom_target(
+        FlashElf
+        COMMAND arm-none-eabi-gdb -q -ex "set confirm off" -ex "target extended-remote :3333" -ex "load" -ex "kill" -ex "quit" ${PROJECT_NAME}.elf
+        DEPENDS ${PROJECT_NAME}.elf
 )

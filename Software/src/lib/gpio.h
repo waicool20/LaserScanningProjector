@@ -28,6 +28,7 @@ class gpio {
 
   void setup(std::uint8_t mode, std::uint8_t pupd);
   void output_opts(std::uint8_t otype, std::uint8_t speed);
+  void set_af(uint8_t af_num);
 
   void state(bool new_state);
   void toggle();
