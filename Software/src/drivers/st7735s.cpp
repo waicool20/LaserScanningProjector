@@ -28,6 +28,7 @@ st7735s::st7735s(uint8_t x, uint8_t y, uint8_t w, uint8_t h, uint8_t color_mode)
 
   // Init SPI
   spi_set_master_mode(SPI1);
+  // 18MBit/s with 72MHz clock
   spi_set_baudrate_prescaler(SPI1, SPI_CR1_BR_FPCLK_DIV_4);
   spi_set_clock_polarity_0(SPI1);
   spi_set_clock_phase_0(SPI1);
@@ -121,7 +122,6 @@ void st7735s::set_color_mode(uint8_t color_mode) {
 void st7735s::set_orientation(uint8_t orientation) {
   uint8_t current_w = width;
   uint8_t current_h = height;
-  /* Memory Data Access Control */
   send_cmd(CMD_MADCTL);
 
   switch (orientation) {
@@ -171,17 +171,16 @@ void st7735s::set_gamma(uint8_t gamma) {
       break; /* GS_pin=1: 2.2; GS_pin=0: 1.0 */
   }
 
-  /* Set built-in gamma */
   send_cmd(CMD_GAMSET);
   send_data(gamma);
 }
 
 bool st7735s::set_window(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2) {
-  /* Accept: 0 <= x1 <= x2 < activeDisplay->width */
+  /* Accept: 0 <= x1 <= x2 < width */
   if (x2 < x1) return false;
   if (x2 >= width) return false;
 
-  /* Accept: 0 <= y1 <= y2 < activeDisplay->height */
+  /* Accept: 0 <= y1 <= y2 < height */
   if (y2 < y1) return false;
   if (y2 >= height) return false;
 
@@ -201,7 +200,6 @@ bool st7735s::set_window(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2) {
 
   /* Activate RAM write */
   send_cmd(CMD_RAMWR);
-
   return true;
 }
 
