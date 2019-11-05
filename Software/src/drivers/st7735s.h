@@ -177,6 +177,14 @@ class st7735s {
     bool set_window(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2);
 
     /**
+     * Draws a pixel on screen
+     * @param x x coordinate
+     * @param y y coordinate
+     * @param rgb rgb color code of pixel
+     */
+    void draw_pixel(uint8_t x, uint8_t y, uint32_t rgb) { draw_rect(x, y, x, y, rgb); }
+
+    /**
      * Draws a rectangle on screen
      * @param x x coordinate
      * @param y y coordinate
