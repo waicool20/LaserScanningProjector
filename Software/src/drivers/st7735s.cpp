@@ -3,7 +3,8 @@
 #include <libopencm3/stm32/spi.h>
 #include <lib/rcc.h>
 
-st7735s::st7735s(uint8_t w, uint8_t h) : width(w), height(h) {
+st7735s::st7735s(uint8_t x, uint8_t y, uint8_t w, uint8_t h, uint8_t color_mode) :
+    x_offset(x), y_offset(y), width(w), height(h) {
   // Init RCC
   rcc_periph_clock_enable(RCC_SPI1);
   rcc_periph_clock_enable(RCC_GPIOA);
@@ -12,10 +13,10 @@ st7735s::st7735s(uint8_t w, uint8_t h) : width(w), height(h) {
   // Init GPIO
   _sck_.setup(GPIO_MODE_AF, GPIO_PUPD_NONE);
   _sck_.output_opts(GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ);
-  _sck_.as_af(GPIO_AF5);
+  _sck_.set_af(GPIO_AF5);
   _mosi_.setup(GPIO_MODE_AF, GPIO_PUPD_NONE);
   _mosi_.output_opts(GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ);
-  _mosi_.as_af(GPIO_AF5);
+  _mosi_.set_af(GPIO_AF5);
   _res_.setup(GPIO_MODE_OUTPUT, GPIO_PUPD_NONE);
   _res_.output_opts(GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ);
   _dc_.setup(GPIO_MODE_OUTPUT, GPIO_PUPD_NONE);
@@ -27,7 +28,7 @@ st7735s::st7735s(uint8_t w, uint8_t h) : width(w), height(h) {
 
   // Init SPI
   spi_set_master_mode(SPI1);
-  spi_set_baudrate_prescaler(SPI1, SPI_CR1_BR_FPCLK_DIV_16);
+  spi_set_baudrate_prescaler(SPI1, SPI_CR1_BR_FPCLK_DIV_4);
   spi_set_clock_polarity_0(SPI1);
   spi_set_clock_phase_0(SPI1);
   spi_set_bidirectional_transmit_only_mode(SPI1);
@@ -56,7 +57,7 @@ st7735s::st7735s(uint8_t w, uint8_t h) : width(w), height(h) {
     slp_out();
     set_orientation(2);
     set_gamma(2);
-    set_color_mode(COLOR_MODE_12_BITS);
+    set_color_mode(color_mode);
     display_enable();
   }
 
@@ -109,47 +110,47 @@ void st7735s::set_draw_order(uint8_t refresh_order_v, uint8_t refresh_order_h, u
 }
 
 void st7735s::set_inverted(bool invert) {
-  send_cmd(invert ? 0x21 : 0x20);
+  send_cmd(invert ? CMD_INVON : CMD_INVOFF);
 }
 
-void st7735s::set_color_mode(uint8_t color_mode){
+void st7735s::set_color_mode(uint8_t color_mode) {
   send_cmd(CMD_COLMOD);
   send_data(color_mode);
 }
 
 void st7735s::set_orientation(uint8_t orientation) {
-  uint8_t cw = width;
-  uint8_t ch = height;
+  uint8_t current_w = width;
+  uint8_t current_h = height;
   /* Memory Data Access Control */
-  send_cmd(0x36);
+  send_cmd(CMD_MADCTL);
 
   switch (orientation) {
     case 1:
       send_data(0x60); /* MX + MV */
-      width = ch;
-      height = cw;
-      set_window(0, 0, ch - 1, cw - 1);
+      width = current_h;
+      height = current_w;
+      set_window(0, 0, current_h - 1, current_w - 1);
       break;
 
     case 2:
       send_data(0xC0); /* MY + MX */
-      width = cw;
-      height = ch;
-      set_window(0, 0, cw - 1, ch - 1);
+      width = current_w;
+      height = current_h;
+      set_window(0, 0, current_w - 1, current_h - 1);
       break;
 
     case 3:
       send_data(0xA0); /* MY + MV */
-      width = ch;
-      height = cw;
-      set_window(0, 0, ch - 1, cw - 1);
+      width = current_h;
+      height = current_w;
+      set_window(0, 0, current_h - 1, current_w - 1);
       break;
 
     default:
       send_data(0x00); /* None */
-      width = cw;
-      height = ch;
-      set_window(0, 0, cw - 1, ch - 1);
+      width = current_w;
+      height = current_h;
+      set_window(0, 0, current_w - 1, current_h - 1);
       break;
   }
 }
@@ -171,7 +172,7 @@ void st7735s::set_gamma(uint8_t gamma) {
   }
 
   /* Set built-in gamma */
-  send_cmd(0x26);
+  send_cmd(CMD_GAMSET);
   send_data(gamma);
 }
 
@@ -185,21 +186,21 @@ bool st7735s::set_window(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2) {
   if (y2 >= height) return false;
 
   /* Set column address */
-  send_cmd(0x2A);
+  send_cmd(CMD_CASET);
   send_data(0);
-  send_data(x1);
+  send_data(x1 + x_offset);
   send_data(0);
-  send_data(x2);
+  send_data(x2 + x_offset);
 
   /* Set row address */
-  send_cmd(0x2B);
+  send_cmd(CMD_RASET);
   send_data(0);
-  send_data(y1);
+  send_data(y1 + y_offset);
   send_data(0);
-  send_data(y2);
+  send_data(y2 + y_offset);
 
   /* Activate RAM write */
-  send_cmd(0x2C);
+  send_cmd(CMD_RAMWR);
 
   return true;
 }
@@ -236,4 +237,20 @@ void st7735s::send_data(uint8_t data) {
   select();
   spi_send8(SPI1, data);
   unselect();
+}
+
+uint8_t st7735s::get_x_offset() const {
+  return x_offset;
+}
+
+uint8_t st7735s::get_y_offset() const {
+  return y_offset;
+}
+
+uint8_t st7735s::get_width() const {
+  return width;
+}
+
+uint8_t st7735s::get_height() const {
+  return height;
 }

@@ -15,6 +15,7 @@ static const uint8_t CMD_NORON = 0x13;
 
 static const uint8_t CMD_INVOFF = 0x20;
 static const uint8_t CMD_INVON = 0x21;
+static const uint8_t CMD_GAMSET = 0x26;
 static const uint8_t CMD_DISPOFF = 0x28;
 static const uint8_t CMD_DISPON = 0x29;
 static const uint8_t CMD_CASET = 0x2A;
@@ -62,11 +63,10 @@ static const uint8_t REFRESH_ORDER_LEFT_TO_RIGHT = 0;
 static const uint8_t COLOR_ORDER_BGR = 1;
 static const uint8_t COLOR_ORDER_RGB = 0;
 
-class st7735r {
+class st7735s {
   public:
-    uint8_t width;
-    uint8_t height;
-    st7735r(std::uint8_t w, std::uint8_t h);
+    st7735s(uint8_t x, uint8_t y, uint8_t w, uint8_t h, uint8_t color_mode);
+
     void select();
     void unselect();
     void hw_reset();
@@ -89,6 +89,11 @@ class st7735r {
 
     void send_cmd(uint8_t cmd);
     void send_data(uint8_t data);
+
+    uint8_t get_x_offset() const;
+    uint8_t get_y_offset() const;
+    uint8_t get_width() const;
+    uint8_t get_height() const;
   private:
     gpio _sck_ = gpio(GPIOA, GPIO5);
     gpio _mosi_ = gpio(GPIOA, GPIO7);
@@ -96,4 +101,9 @@ class st7735r {
     gpio _dc_ = gpio(GPIOB, GPIO10);
     gpio _cs_ = gpio(GPIOA, GPIO4);
     gpio _bl_ = gpio(GPIOB, GPIO11);
+
+    uint8_t x_offset;
+    uint8_t y_offset;
+    uint8_t width;
+    uint8_t height;
 };
