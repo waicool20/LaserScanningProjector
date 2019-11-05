@@ -3,31 +3,13 @@
 #include <libopencm3/stm32/gpio.h>
 #include <libopencm3/stm32/rcc.h>
 #include <libopencm3/stm32/spi.h>
+#include <drivers/st7735s.h>
 
 #include "drivers/stepper_motor.h"
 #include "lib/rcc.h"
 #include "lib/systick.h"
 
 namespace {
-void rcc_setup() {
-  rcc::periph_clock_enable(RCC_GPIOB);
-}
-
-void spi_setup() {
-  rcc::periph_clock_enable(RCC_SPI1);
-  rcc::periph_clock_enable(RCC_GPIOA);
-
-  gpio_mode_setup(GPIOA, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO4 | GPIO5 | GPIO7);
-  gpio_set_af(GPIOA, GPIO_AF5, GPIO4 | GPIO5 | GPIO7);
-
-  spi_init_master(SPI1, SPI_CR1_BAUDRATE_FPCLK_DIV_64, SPI_CR1_CPOL_CLK_TO_0_WHEN_IDLE, SPI_CR1_CPHA_CLK_TRANSITION_1, SPI_CR1_MSBFIRST);
-
-  spi_set_bidirectional_mode(SPI1);
-  spi_enable_software_slave_management(SPI1);
-//  spi_set_nss_high(SPI1);
-  spi_enable_ss_output(SPI1);
-  spi_enable(SPI1);
-}
 }  // namespace
 
 int main() {
@@ -35,39 +17,42 @@ int main() {
 
   systick::init();
 
-  rcc_setup();
+  st7735s lcd{2, 1, 128, 160, COLOR_MODE_18_BITS};
+  rcc_periph_clock_enable(RCC_GPIOC);
+  rcc_periph_clock_enable(RCC_GPIOB);
+  gpio up = gpio(GPIOC, GPIO15);
+  gpio down = gpio(GPIOC, GPIO13);
+  gpio left = gpio(GPIOC, GPIO14);
+  gpio right = gpio(GPIOB, GPIO8);
 
-  gpio lcd_reset(GPIOB, GPIO2);
-  lcd_reset.setup(GPIO_MODE_OUTPUT, GPIO_PUPD_NONE);
-  lcd_reset.state(true);
-  systick::sleep_ms(1);
-  lcd_reset.state(false);
 
-  gpio lcd_dc(GPIOB, GPIO10);
-  lcd_dc.setup(GPIO_MODE_OUTPUT, GPIO_PUPD_NONE);
-
-  gpio lcd_cs(GPIOA, GPIO4);
-  lcd_cs.setup(GPIO_MODE_OUTPUT, GPIO_PUPD_NONE);
-  lcd_cs.state(true);
-
-  spi_setup();
-
-  lcd_dc.state(false);
-//  spi_set_nss_low(SPI1);
-  lcd_cs.state(false);
-  int d = spi_xfer(SPI1, 0xDA);
-  int v = spi_xfer(SPI1, 0xDA);
-//  spi_set_nss_high(SPI1);
-  lcd_cs.state(true);
-  lcd_dc.state(true);
-
-  gpio lcd_bk(GPIOB, GPIO11);
-  lcd_bk.setup(GPIO_MODE_OUTPUT, GPIO_PUPD_NONE);
-  lcd_bk.output_opts(GPIO_OTYPE_PP, GPIO_OSPEED_2MHZ);
-
+  up.setup(GPIO_MODE_INPUT, GPIO_PUPD_PULLDOWN);
+  down.setup(GPIO_MODE_INPUT, GPIO_PUPD_PULLDOWN);
+  left.setup(GPIO_MODE_INPUT, GPIO_PUPD_PULLDOWN);
+  right.setup(GPIO_MODE_INPUT, GPIO_PUPD_PULLDOWN);
+  lcd.draw_rect(1, 1, 32, 32, 0x00979D);
+  lcd.draw_rect(1, lcd.get_height() - 33, 32, 32, 0x00979D);
+  lcd.draw_rect(lcd.get_width() - 33, 1, 32, 32, 0x00979D);
+  lcd.draw_rect(lcd.get_width() - 33, lcd.get_height() - 33, 32, 32, 0x00979D);
+  uint8_t x = 0;
+  uint8_t y = 0;
   while (true) {
-    lcd_bk.toggle();
-
-    systick::sleep_ms(1000);
+    if (up.get()) {
+      y -= 8;
+      lcd.draw_screen(0xFFFFFF);
+    }
+    if (down.get()) {
+      y += 8;
+      lcd.draw_screen(0xFFFFFF);
+    }
+    if (left.get()) {
+      x -= 8;
+      lcd.draw_screen(0xFFFFFF);
+    }
+    if (right.get()) {
+      x += 8;
+      lcd.draw_screen(0xFFFFFF);
+    }
+    lcd.draw_rect(lcd.get_width() / 2 + x, lcd.get_height() / 2 + y, 8, 8, 0x00);
   }
 }
