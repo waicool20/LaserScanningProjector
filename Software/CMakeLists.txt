@@ -35,10 +35,9 @@ message("----------------------------------------")
 
 add_executable(${PROJECT_NAME}.elf
         src/main.cpp
-
         src/drivers/st7735s.cpp
         src/drivers/stepper_motor.cpp
-
+        src/drivers/laser.cpp
         src/lib/gpio.cpp
         src/lib/rcc.cpp
         src/lib/systick.cpp)
