@@ -42,6 +42,6 @@ void laser::toggle() {
 
 uint8_t laser::set_brightness(uint8_t percent) {
   uint8_t p = std::clamp((int) percent, 0, 100);
-  timer_set_oc_value(TIM1, TIM_OC1, p * 10);
+  timer_set_oc_value(TIM1, TIM_OC1, (100 - p) * 10);
   return p;
 }
