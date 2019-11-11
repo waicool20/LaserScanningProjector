@@ -24,6 +24,9 @@ bool laser_canvas::home() {
         if (home_ldr.get()) {
           x_motor.do_steps(spr / 360);
           if (stage == stages) {
+            x_motor.do_steps(spr / 360);
+            current_x = 0;
+            current_y = 0;
             return true;
           } else {
             goto next_stage;
