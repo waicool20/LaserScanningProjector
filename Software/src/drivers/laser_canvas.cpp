@@ -22,8 +22,8 @@ bool laser_canvas::home() {
         uint8_t sleep = stage - 1;
         systick::sleep_us(sleep * sleep * 10);
         if (home_ldr.get()) {
+          x_motor.do_steps(spr / 360);
           if (stage == stages) {
-            x_motor.do_steps(spr / 360);
             return true;
           } else {
             goto next_stage;
