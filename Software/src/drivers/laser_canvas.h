@@ -26,6 +26,8 @@ class laser_canvas {
      */
     bool home();
 
+    void goto_xy(uint32_t x, uint32_t y);
+
     uint32_t get_current_x() const;
     uint32_t get_current_y() const;
     uint32_t get_width() const;

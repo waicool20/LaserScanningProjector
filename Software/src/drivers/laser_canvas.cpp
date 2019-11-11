@@ -44,6 +44,18 @@ bool laser_canvas::home() {
   return false;
 }
 
+void laser_canvas::goto_xy(uint32_t x, uint32_t y) {
+  if (x > _width || y > _height) return;
+  int32_t dx = x - current_x;
+  int32_t dy = y - current_y;
+  _x_motor.set_dir(dx > 0 ? stepper_motor::cw : stepper_motor::ccw);
+  _y_motor.set_dir(dy > 0 ? stepper_motor::ccw : stepper_motor::cw);
+  _x_motor.do_steps(abs(static_cast<int>(dx)));
+  _y_motor.do_steps(abs(static_cast<int>(dy)));
+  current_x = x;
+  current_y = y;
+}
+
 uint32_t laser_canvas::get_width() const {
   return _width;
 }
