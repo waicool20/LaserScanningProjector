@@ -43,3 +43,19 @@ bool laser_canvas::home() {
   }
   return false;
 }
+
+uint32_t laser_canvas::get_width() const {
+  return _width;
+}
+
+uint32_t laser_canvas::get_height() const {
+  return _height;
+}
+
+uint32_t laser_canvas::get_current_x() const {
+  return current_x;
+}
+
+uint32_t laser_canvas::get_current_y() const {
+  return current_y;
+}

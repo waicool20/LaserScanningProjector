@@ -25,6 +25,11 @@ class laser_canvas {
      * @return True if homing was successful, otherwise false
      */
     bool home();
+
+    uint32_t get_current_x() const;
+    uint32_t get_current_y() const;
+    uint32_t get_width() const;
+    uint32_t get_height() const;
   private:
     uint32_t current_x = 0;
     uint32_t current_y = 0;
