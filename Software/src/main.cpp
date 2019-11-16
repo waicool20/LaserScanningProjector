@@ -22,7 +22,7 @@ int main() {
 
   systick::init();
 
-  st7735s lcd{2, 1, 128, 160, COLOR_MODE_18_BITS};
+  st7735s lcd{2, 1, 128, 160, st7735s::COLOR_MODE_18_BITS};
   rcc_periph_clock_enable(RCC_GPIOC);
   rcc_periph_clock_enable(RCC_GPIOB);
   gpio up = gpio(GPIOC, GPIO15);
@@ -51,13 +51,13 @@ int main() {
   }
 
   lcd.draw_rect(1, 1, 32, 32, 0x00979D);
-  lcd.draw_rect(1, lcd.get_height() - 33, 32, 32, 0x00979D);
-  lcd.draw_rect(lcd.get_width() - 33, 1, 32, 32, 0x00979D);
-  lcd.draw_rect(lcd.get_width() - 33, lcd.get_height() - 33, 32, 32, 0x00979D);
+  lcd.draw_rect(1, lcd.height() - 33, 32, 32, 0x00979D);
+  lcd.draw_rect(lcd.width() - 33, 1, 32, 32, 0x00979D);
+  lcd.draw_rect(lcd.width() - 33, lcd.height() - 33, 32, 32, 0x00979D);
 
-  uint8_t x = 0;
-  uint8_t y = 0;
-  uint8_t dc = 50;
+  std::uint8_t x = 0;
+  std::uint8_t y = 0;
+  std::uint8_t dc = 50;
   while (true) {
     if (up.get()) {
       y -= 8;
@@ -84,22 +84,22 @@ int main() {
       uint16_t deg = 0;
       uint16_t centx = canvas.get_width() / 2;
       uint16_t centy = canvas.get_height() / 2;
-      while(true) {
+      while (true) {
 /*        canvas.goto_xy(centx + 35 * cos(deg * PI / 180), centy + 35 * sin(deg * PI / 180));
         if (++deg == 360) deg = 0;*/
-        for(uint32_t i = 0; i < canvas.get_height(); ++i) {
+        for (uint32_t i = 0; i < canvas.get_height(); ++i) {
           canvas.goto_xy(0, i);
         }
         systick::sleep_ms(5);
-        for(uint32_t i = 0; i < canvas.get_width(); ++i) {
+        for (uint32_t i = 0; i < canvas.get_width(); ++i) {
           canvas.goto_xy(i, canvas.get_height());
         }
         systick::sleep_ms(5);
-        for(uint32_t i = canvas.get_height(); i > 0; --i) {
+        for (uint32_t i = canvas.get_height(); i > 0; --i) {
           canvas.goto_xy(canvas.get_width(), i);
         }
         systick::sleep_ms(5);
-        for(uint32_t i = canvas.get_width(); i > 0; --i) {
+        for (uint32_t i = canvas.get_width(); i > 0; --i) {
           canvas.goto_xy(i, 0);
         }
         systick::sleep_ms(5);

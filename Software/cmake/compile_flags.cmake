@@ -27,7 +27,7 @@ if ("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQU
             -Wextra
             -Wcast-align
             -Wcast-qual
-            -Wconversion
+#            -Wconversion
             -Wdisabled-optimization
             -Wdouble-promotion
             -Wduplicated-cond

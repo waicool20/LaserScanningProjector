@@ -1,8 +1,13 @@
 #include "laser_canvas.h"
 #include <lib/systick.h>
 
-laser_canvas::laser_canvas(uint32_t spr, uint32_t width, uint32_t height, laser laser, stepper_motor x_motor,
-                           stepper_motor y_motor, gpio ldr)
+laser_canvas::laser_canvas(std::uint32_t spr,
+                           std::uint32_t width,
+                           std::uint32_t height,
+                           laser laser,
+                           stepper_motor x_motor,
+                           stepper_motor y_motor,
+                           gpio ldr)
     : _spr(spr), _width(width), _height(height), _laser(laser), _x_motor(x_motor), _y_motor(y_motor), _ldr(ldr) {
   ldr.setup(GPIO_MODE_INPUT, GPIO_PUPD_NONE);
 }
@@ -11,15 +16,15 @@ bool laser_canvas::home() {
   _laser.enable();
   _x_motor.set_dir(stepper_motor::cw);
   _y_motor.set_dir(stepper_motor::cw);
-  uint32_t steps = (_spr / 360) / 2;
+  std::uint32_t steps = (_spr / 360) / 2;
 
-  uint8_t stages = 4;
-  for (uint8_t stage = 1; stage <= stages; ++stage) {
-    for (uint32_t y = 0; y < _spr; y += steps) {
-      for (uint32_t x = 0; x < _spr; ++x) {
+  std::uint8_t stages = 4;
+  for (std::uint8_t stage = 1; stage <= stages; ++stage) {
+    for (std::uint32_t y = 0; y < _spr; y += steps) {
+      for (std::uint32_t x = 0; x < _spr; ++x) {
         _x_motor.do_steps(1);
-        uint8_t sleep = stage - 1;
-        systick::sleep_us(sleep * sleep * 10);
+        std::uint8_t sleep = stage - 1;
+        systick::sleep_us(std::uint64_t(sleep * sleep * 10));
         if (_ldr.get()) {
           _x_motor.do_steps(_spr / 360);
           if (stage == stages) {
@@ -39,37 +44,37 @@ bool laser_canvas::home() {
     }
     next_stage:
     _y_motor.toggle_dir();
-    _y_motor.do_steps(round(1.25 * steps));
+    _y_motor.do_steps(std::round(1.25 * steps));
     _y_motor.toggle_dir();
     steps /= 2;
   }
   return false;
 }
 
-void laser_canvas::goto_xy(uint32_t x, uint32_t y) {
-  if (x > _width || y > _height) return;
-  int32_t dx = x - current_x;
-  int32_t dy = y - current_y;
+void laser_canvas::goto_xy(std::uint32_t x, std::uint32_t y) {
+  if (x > _width || y > _height) { return; }
+  auto dx = std::int32_t(x - current_x);
+  auto dy = std::int32_t(y - current_y);
   _x_motor.set_dir(dx > 0 ? stepper_motor::cw : stepper_motor::ccw);
   _y_motor.set_dir(dy > 0 ? stepper_motor::ccw : stepper_motor::cw);
-  _x_motor.do_steps(abs(static_cast<int>(dx)));
-  _y_motor.do_steps(abs(static_cast<int>(dy)));
+  _x_motor.do_steps(std::uint32_t(std::abs(dx)));
+  _y_motor.do_steps(std::uint32_t(std::abs(dy)));
   current_x = x;
   current_y = y;
 }
 
-uint32_t laser_canvas::get_width() const {
+std::uint32_t laser_canvas::get_width() const {
   return _width;
 }
 
-uint32_t laser_canvas::get_height() const {
+std::uint32_t laser_canvas::get_height() const {
   return _height;
 }
 
-uint32_t laser_canvas::get_current_x() const {
+std::uint32_t laser_canvas::get_current_x() const {
   return current_x;
 }
 
-uint32_t laser_canvas::get_current_y() const {
+std::uint32_t laser_canvas::get_current_y() const {
   return current_y;
 }

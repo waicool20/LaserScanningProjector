@@ -34,7 +34,7 @@ void stepper_motor::toggle_dir() {
 }
 
 void stepper_motor::do_steps(std::uint32_t steps) {
-  for (uint32_t i = 0; i < steps; i++) {
+  for (std::uint32_t i = 0; i < steps; i++) {
     _step_.state(true);
     systick::sleep_us(2);
     _step_.state(false);
