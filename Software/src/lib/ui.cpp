@@ -1,0 +1,68 @@
+#include <libopencm3/cm3/nvic.h>
+#include <libopencm3/stm32/timer.h>
+#include "ui.h"
+#include "rcc.h"
+#include "../../middleware/lvgl/lvgl.h"
+#include "../../middleware/lvgl/src/lv_misc/lv_color.h"
+
+st7735s* ui::_lcd = nullptr;
+lv_disp_buf_t ui::disp_buf = lv_disp_buf_t {};
+lv_color_t ui::buf1[LV_HOR_RES_MAX * 10];
+
+extern "C" void tim6_dac_isr() {
+  if (timer_get_flag(TIM6, TIM_SR_UIF)) {
+    timer_clear_flag(TIM6, TIM_SR_UIF);
+    lv_tick_inc(5);
+  }
+}
+
+void ui::init() {
+  // Init Timer, 5ms ticks
+  {
+    rcc::periph_clock_enable(RCC_TIM6);
+    nvic_enable_irq(NVIC_TIM6_DAC_IRQ);
+    rcc::periph_reset_pulse(RST_TIM6);
+
+    timer_set_mode(TIM6, TIM_CR1_CKD_CK_INT,
+                   TIM_CR1_CMS_EDGE, TIM_CR1_DIR_UP);
+    timer_set_prescaler(TIM6, 72000);
+    timer_disable_preload(TIM6);
+    timer_continuous_mode(TIM6);
+    timer_set_period(TIM6, 25);
+    timer_update_on_overflow(TIM6);
+    timer_enable_update_event(TIM6);
+    timer_enable_counter(TIM6);
+    timer_enable_irq(TIM6, TIM_DIER_UIE);
+  }
+
+  lv_init();
+  /*Initialize the display buffer*/
+  lv_disp_buf_init(&disp_buf, ui::buf1, nullptr, LV_HOR_RES_MAX);
+
+
+  lv_disp_drv_t disp_drv;                     /*Descriptor of a display driver*/
+  lv_disp_drv_init(&disp_drv);                /*Basic initialization*/
+  disp_drv.flush_cb = flush_lcd;              /*Set driver function*/
+  disp_drv.buffer = &disp_buf;                /*Assign the buffer to the display*/
+  lv_disp_drv_register(&disp_drv);            /*Finally register the driver*/
+
+  lv_indev_drv_t indev_drv;
+  lv_indev_drv_init(&indev_drv);              /*Descriptor of a input device driver*/
+  indev_drv.type = LV_INDEV_TYPE_KEYPAD;      /*Touch pad is a pointer-like device*/
+  indev_drv.read_cb = nav5_read;              /*Set your driver function*/
+  lv_indev_drv_register(&indev_drv);          /*Finally register the driver*/
+
+}
+
+void ui::flush_lcd(struct _disp_drv_t* disp_drv, const lv_area_t* area, lv_color_t* color_p) {
+  if (!_lcd->set_window(area->x1, area->y1, area->x2, area->y2)) { return; }
+  for(uint32_t y = area->y1; y <= area->y2; y++) {
+    for(uint32_t x = area->x1; x <= area->x2; x++) {
+      _lcd->send_data(color_p->ch.red);
+      _lcd->send_data(color_p->ch.green);
+      _lcd->send_data(color_p->ch.blue);
+      color_p++;
+    }
+  }
+  lv_disp_flush_ready(disp_drv);
+}

@@ -44,7 +44,8 @@ add_executable(${PROJECT_NAME}.elf
         src/drivers/laser_canvas.cpp
         src/lib/gpio.cpp
         src/lib/rcc.cpp
-        src/lib/systick.cpp)
+        src/lib/systick.cpp
+        src/lib/ui.cpp)
 add_dependencies(${PROJECT_NAME}.elf libopencm3-genlink)
 target_compile_options(${PROJECT_NAME}.elf PRIVATE
         ${TARGET_SPECIFIC_FLAGS}

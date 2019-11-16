@@ -5,4 +5,5 @@
 struct rcc {
   inline static void clock_setup_pll(const rcc_clock_scale& clock) { rcc_clock_setup_pll(&clock); }
   inline static void periph_clock_enable(rcc_periph_clken periph) { rcc_periph_clock_enable(periph); }
+  inline static void periph_reset_pulse(rcc_periph_rst periph) { rcc_periph_reset_pulse(periph); }
 };
