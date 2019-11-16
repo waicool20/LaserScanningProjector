@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string_view>
+
 #include <libopencm3/stm32/spi.h>
 #include "lib/gpio.h"
 
@@ -174,6 +176,32 @@ class st7735s {
    * @return
    */
   bool set_window(std::uint8_t x1, std::uint8_t y1, std::uint8_t x2, std::uint8_t y2);
+
+  /**
+   * \brief Draws a character on the screen.
+   *
+   * \param x x-coordinate of the top left corner
+   * \param y y-coordinate of the top left corner
+   * \param c character
+   * \param fg_rgb foreground (character) color
+   * \param bg_rgb background color
+   */
+  void draw_char(std::uint8_t x,
+                 std::uint8_t y,
+                 char c,
+                 std::uint32_t fg_rgb = 0xFFFFFF,
+                 std::uint32_t bg_rgb = 0x000000);
+
+  /**
+   * \brief Draws a character string on the screen.
+   *
+   * \param x x-coordinate of the top left corner
+   * \param y y-coordinate of the top left corner
+   * \param sv character string
+   * \param fg_rgb foreground (character) color
+   * \param bg_rgb background color
+   */
+  void draw_string(std::uint8_t x, std::uint8_t y, std::string_view sv, std::uint32_t fg_rgb = 0xFFFFFF, std::uint32_t bg_rgb = 0x000000);
 
   /**
    * Draws a pixel on screen
