@@ -31,6 +31,9 @@ set(ADDITIONAL_LINKER_FLAGS
         -Wl,-Map,${CMAKE_PROJECT_NAME}.map,--cref
         -Wl,--gc-sections)
 
+# Additional Libraries
+include(cmake/lvgl.cmake)
+
 message("----------------------------------------")
 
 add_executable(${PROJECT_NAME}.elf
@@ -54,7 +57,8 @@ target_link_options(${PROJECT_NAME}.elf PRIVATE
 target_link_libraries(${PROJECT_NAME}.elf PRIVATE
         ${LDLIBS}
         c
-        rdimon)
+        rdimon
+        LVGL)
 
 # Add a secondary target to generate a bin file from the elf file.
 add_custom_target(
