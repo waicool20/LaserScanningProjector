@@ -3,17 +3,23 @@
 #include "ui.h"
 #include "rcc.h"
 #include "../../middleware/lvgl/lvgl.h"
-#include "../../middleware/lvgl/src/lv_misc/lv_color.h"
 
-st7735s* ui::_lcd = nullptr;
-lv_disp_buf_t ui::disp_buf = lv_disp_buf_t {};
+st7735s *ui::_lcd = nullptr;
+nav5 *ui::_nav5 = nullptr;
+lv_disp_buf_t ui::disp_buf = lv_disp_buf_t{};
 lv_color_t ui::buf1[LV_HOR_RES_MAX * 10];
+circular_queue<ui::btn_event, 10> ui::btn_events{};
 
 extern "C" void tim6_dac_isr() {
   if (timer_get_flag(TIM6, TIM_SR_UIF)) {
     timer_clear_flag(TIM6, TIM_SR_UIF);
     lv_tick_inc(5);
   }
+}
+
+ui::ui(st7735s *lcd, nav5 *nav5) {
+  _lcd = lcd;
+  _nav5 = nav5;
 }
 
 void ui::init() {
@@ -35,6 +41,25 @@ void ui::init() {
     timer_enable_irq(TIM6, TIM_DIER_UIE);
   }
 
+  // Init GPIO
+  {
+    _nav5->on_up([](bool state) {
+      btn_events.push({LV_KEY_UP, state});
+    });
+    _nav5->on_down([](bool state) {
+      btn_events.push({LV_KEY_DOWN, state});
+    });
+    _nav5->on_left([](bool state) {
+      btn_events.push({LV_KEY_LEFT, state});
+    });
+    _nav5->on_right([](bool state) {
+      btn_events.push({LV_KEY_RIGHT, state});
+    });
+    _nav5->on_center([](bool state) {
+      btn_events.push({LV_KEY_ENTER, state});
+    });
+  }
+
   lv_init();
   /*Initialize the display buffer*/
   lv_disp_buf_init(&disp_buf, ui::buf1, nullptr, LV_HOR_RES_MAX);
@@ -51,13 +76,12 @@ void ui::init() {
   indev_drv.type = LV_INDEV_TYPE_KEYPAD;      /*Touch pad is a pointer-like device*/
   indev_drv.read_cb = nav5_read;              /*Set your driver function*/
   lv_indev_drv_register(&indev_drv);          /*Finally register the driver*/
-
 }
 
-void ui::flush_lcd(struct _disp_drv_t* disp_drv, const lv_area_t* area, lv_color_t* color_p) {
+void ui::flush_lcd(_disp_drv_t *disp_drv, const lv_area_t *area, lv_color_t *color_p) {
   if (!_lcd->set_window(area->x1, area->y1, area->x2, area->y2)) { return; }
-  for(uint32_t y = area->y1; y <= area->y2; y++) {
-    for(uint32_t x = area->x1; x <= area->x2; x++) {
+  for (uint32_t y = area->y1; y <= area->y2; y++) {
+    for (uint32_t x = area->x1; x <= area->x2; x++) {
       _lcd->send_data(color_p->ch.red);
       _lcd->send_data(color_p->ch.green);
       _lcd->send_data(color_p->ch.blue);
@@ -65,4 +89,11 @@ void ui::flush_lcd(struct _disp_drv_t* disp_drv, const lv_area_t* area, lv_color
     }
   }
   lv_disp_flush_ready(disp_drv);
+}
+
+bool ui::nav5_read(_lv_indev_drv_t *indev_drv, lv_indev_data_t *data) {
+  data->key = btn_events.front().key;
+  data->state = btn_events.front().state ? LV_INDEV_STATE_PR : LV_INDEV_STATE_REL;
+  btn_events.pop();
+  return btn_events.size() > 0;
 }
