@@ -64,18 +64,17 @@ void ui::init() {
   /*Initialize the display buffer*/
   lv_disp_buf_init(&disp_buf, ui::buf1, nullptr, LV_HOR_RES_MAX);
 
-
   lv_disp_drv_t disp_drv;                     /*Descriptor of a display driver*/
   lv_disp_drv_init(&disp_drv);                /*Basic initialization*/
   disp_drv.flush_cb = flush_lcd;              /*Set driver function*/
   disp_drv.buffer = &disp_buf;                /*Assign the buffer to the display*/
-  lv_disp_drv_register(&disp_drv);            /*Finally register the driver*/
+  display = lv_disp_drv_register(&disp_drv);  /*Finally register the driver*/
 
   lv_indev_drv_t indev_drv;
   lv_indev_drv_init(&indev_drv);              /*Descriptor of a input device driver*/
   indev_drv.type = LV_INDEV_TYPE_KEYPAD;      /*Touch pad is a pointer-like device*/
   indev_drv.read_cb = nav5_read;              /*Set your driver function*/
-  lv_indev_drv_register(&indev_drv);          /*Finally register the driver*/
+  input_device = lv_indev_drv_register(&indev_drv);   /*Finally register the driver*/
 }
 
 void ui::flush_lcd(_disp_drv_t *disp_drv, const lv_area_t *area, lv_color_t *color_p) {

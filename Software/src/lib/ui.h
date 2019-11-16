@@ -16,7 +16,13 @@ class ui {
     };
     ui(st7735s *lcd, nav5 *nav5);
     void init();
+
+    lv_indev_t* get_input_device() const { return input_device; }
+    lv_disp_t* get_display() const { return display; }
   private:
+    lv_indev_t* input_device;
+    lv_disp_t* display;
+
     static st7735s *_lcd;
     static nav5 *_nav5;
     static lv_disp_buf_t disp_buf;
