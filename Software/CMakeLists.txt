@@ -42,6 +42,7 @@ add_executable(${PROJECT_NAME}.elf
         src/drivers/stepper_motor.cpp
         src/drivers/laser.cpp
         src/drivers/laser_canvas.cpp
+        src/drivers/nav5.cpp
         src/lib/gpio.cpp
         src/lib/rcc.cpp
         src/lib/systick.cpp

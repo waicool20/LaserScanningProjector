@@ -1,9 +1,8 @@
 #include <libopencm3/cm3/nvic.h>
-#include <libopencm3/stm32/exti.h>
 #include "gpio.h"
 #include "rcc.h"
 
-void (*gpio::pin_callback[16])() = {
+std::array<void (*)(bool), 16> gpio::pin_callback {
     gpio::callback_nop, gpio::callback_nop,
     gpio::callback_nop, gpio::callback_nop,
     gpio::callback_nop, gpio::callback_nop,
@@ -14,89 +13,91 @@ void (*gpio::pin_callback[16])() = {
     gpio::callback_nop, gpio::callback_nop
 };
 
-void gpio::callback_nop() {
+std::array<gpio*, 16> gpio::exti_pins {};
+
+void gpio::callback_nop(bool) {
   // Do nothing
 }
 
 extern "C" void exti0_isr() {
   exti_reset_request(EXTI0);
-  gpio::pin_callback[0]();
-  exti_set_trigger(EXTI0, EXTI_TRIGGER_RISING);
+  if (gpio::exti_pins[0] != nullptr) gpio::pin_callback[0](gpio::exti_pins[0]->get());
+  exti_set_trigger(EXTI0, gpio::exti_pins[0]->get_exti_trigger_type());
 }
 
 extern "C" void exti1_isr() {
   exti_reset_request(EXTI1);
-  gpio::pin_callback[1]();
-  exti_set_trigger(EXTI1, EXTI_TRIGGER_RISING);
+  if (gpio::exti_pins[1] != nullptr) gpio::pin_callback[1](gpio::exti_pins[1]->get());
+  exti_set_trigger(EXTI1, gpio::exti_pins[1]->get_exti_trigger_type());
 }
 
 extern "C" void exti2_tsc_isr() {
   exti_reset_request(EXTI2);
-  gpio::pin_callback[2]();
-  exti_set_trigger(EXTI2, EXTI_TRIGGER_RISING);
+  if (gpio::exti_pins[2] != nullptr) gpio::pin_callback[2](gpio::exti_pins[2]->get());
+  exti_set_trigger(EXTI2, gpio::exti_pins[2]->get_exti_trigger_type());
 }
 
 extern "C" void exti3_isr() {
   exti_reset_request(EXTI3);
-  gpio::pin_callback[3]();
-  exti_set_trigger(EXTI3, EXTI_TRIGGER_RISING);
+  if (gpio::exti_pins[3] != nullptr) gpio::pin_callback[3](gpio::exti_pins[3]->get());
+  exti_set_trigger(EXTI3, gpio::exti_pins[3]->get_exti_trigger_type());
 }
 
 extern "C" void exti4_isr() {
   exti_reset_request(EXTI4);
-  gpio::pin_callback[4]();
-  exti_set_trigger(EXTI4, EXTI_TRIGGER_RISING);
+  if (gpio::exti_pins[4] != nullptr) gpio::pin_callback[4](gpio::exti_pins[4]->get());
+  exti_set_trigger(EXTI4, gpio::exti_pins[4]->get_exti_trigger_type());
 }
 
 extern "C" void exti9_5_isr() {
   if (exti_get_flag_status(EXTI5)) {
     exti_reset_request(EXTI5);
-    gpio::pin_callback[5]();
-    exti_set_trigger(EXTI5, EXTI_TRIGGER_RISING);
+    if (gpio::exti_pins[5] != nullptr) gpio::pin_callback[5](gpio::exti_pins[5]->get());
+    exti_set_trigger(EXTI5, gpio::exti_pins[5]->get_exti_trigger_type());
   } else if (exti_get_flag_status(EXTI6)) {
     exti_reset_request(EXTI6);
-    gpio::pin_callback[6]();
-    exti_set_trigger(EXTI6, EXTI_TRIGGER_RISING);
+    if (gpio::exti_pins[6] != nullptr) gpio::pin_callback[6](gpio::exti_pins[6]->get());
+    exti_set_trigger(EXTI6, gpio::exti_pins[6]->get_exti_trigger_type());
   } else if (exti_get_flag_status(EXTI7)) {
     exti_reset_request(EXTI7);
-    gpio::pin_callback[7]();
-    exti_set_trigger(EXTI7, EXTI_TRIGGER_RISING);
+    if (gpio::exti_pins[7] != nullptr) gpio::pin_callback[7](gpio::exti_pins[7]->get());
+    exti_set_trigger(EXTI7, gpio::exti_pins[7]->get_exti_trigger_type());
   } else if (exti_get_flag_status(EXTI8)) {
     exti_reset_request(EXTI8);
-    gpio::pin_callback[8]();
-    exti_set_trigger(EXTI8, EXTI_TRIGGER_RISING);
+    if (gpio::exti_pins[8] != nullptr) gpio::pin_callback[8](gpio::exti_pins[8]->get());
+    exti_set_trigger(EXTI8, gpio::exti_pins[8]->get_exti_trigger_type());
   } else if (exti_get_flag_status(EXTI9)) {
     exti_reset_request(EXTI9);
-    gpio::pin_callback[9]();
-    exti_set_trigger(EXTI9, EXTI_TRIGGER_RISING);
+    if (gpio::exti_pins[9] != nullptr) gpio::pin_callback[9](gpio::exti_pins[9]->get());
+    exti_set_trigger(EXTI9, gpio::exti_pins[9]->get_exti_trigger_type());
   }
 }
 
 extern "C" void exti15_10_isr() {
   if (exti_get_flag_status(EXTI10)) {
     exti_reset_request(EXTI10);
-    gpio::pin_callback[10]();
-    exti_set_trigger(EXTI10, EXTI_TRIGGER_RISING);
+    if (gpio::exti_pins[10] != nullptr) gpio::pin_callback[10](gpio::exti_pins[10]->get());
+    exti_set_trigger(EXTI10, gpio::exti_pins[10]->get_exti_trigger_type());
   } else if (exti_get_flag_status(EXTI11)) {
     exti_reset_request(EXTI11);
-    gpio::pin_callback[11]();
-    exti_set_trigger(EXTI11, EXTI_TRIGGER_RISING);
+    if (gpio::exti_pins[11] != nullptr) gpio::pin_callback[11](gpio::exti_pins[11]->get());
+    exti_set_trigger(EXTI11, gpio::exti_pins[11]->get_exti_trigger_type());
   } else if (exti_get_flag_status(EXTI12)) {
     exti_reset_request(EXTI12);
-    gpio::pin_callback[12]();
-    exti_set_trigger(EXTI12, EXTI_TRIGGER_RISING);
+    if (gpio::exti_pins[12] != nullptr) gpio::pin_callback[12](gpio::exti_pins[12]->get());
+    exti_set_trigger(EXTI12, gpio::exti_pins[12]->get_exti_trigger_type());
   } else if (exti_get_flag_status(EXTI13)) {
     exti_reset_request(EXTI13);
-    gpio::pin_callback[13]();
-    exti_set_trigger(EXTI13, EXTI_TRIGGER_RISING);
+    if (gpio::exti_pins[13] != nullptr) gpio::pin_callback[13](gpio::exti_pins[13]->get());
+    exti_set_trigger(EXTI13, gpio::exti_pins[13]->get_exti_trigger_type());
   } else if (exti_get_flag_status(EXTI14)) {
     exti_reset_request(EXTI14);
-    gpio::pin_callback[14]();
-    exti_set_trigger(EXTI14, EXTI_TRIGGER_RISING);
+    if (gpio::exti_pins[14] != nullptr) gpio::pin_callback[14](gpio::exti_pins[14]->get());
+    exti_set_trigger(EXTI14, gpio::exti_pins[14]->get_exti_trigger_type());
   } else if (exti_get_flag_status(EXTI15)) {
     exti_reset_request(EXTI15);
-    gpio::pin_callback[15]();
-    exti_set_trigger(EXTI15, EXTI_TRIGGER_RISING);
+    if (gpio::exti_pins[15] != nullptr) gpio::pin_callback[15](gpio::exti_pins[15]->get());
+    exti_set_trigger(EXTI15, gpio::exti_pins[15]->get_exti_trigger_type());
   }
 }
 
@@ -116,7 +117,7 @@ void gpio::set_af(uint8_t af_num) {
   gpio_set_af(port, af_num, pin);
 }
 
-void gpio::enable_ext_interrupt() {
+void gpio::enable_ext_interrupt(exti_trigger_type type) {
   rcc::periph_clock_enable(RCC_SYSCFG);
   switch (pin) {
     case EXTI0:
@@ -152,9 +153,10 @@ void gpio::enable_ext_interrupt() {
     default:
       return;
   }
+  exti_pins[get_pin_num()] = this;
   // Should probably use EXTI enums but using pin for convenience
   exti_select_source(pin, port);
-  exti_set_trigger(pin, EXTI_TRIGGER_RISING);
+  exti_set_trigger(pin, type);
   exti_enable_request(pin);
 }
 
@@ -180,4 +182,8 @@ volatile gpio::mmio *gpio::handle() {
 
 uint8_t gpio::get_pin_num() const {
   return _pin_num;
+}
+
+exti_trigger_type gpio::get_exti_trigger_type() const {
+  return _trigger_type;
 }

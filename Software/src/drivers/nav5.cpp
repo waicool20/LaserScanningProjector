@@ -8,9 +8,9 @@ nav5::nav5(const gpio &up, const gpio &down, const gpio &left, const gpio &right
   _right.setup(GPIO_MODE_INPUT, GPIO_PUPD_PULLDOWN);
   _center.setup(GPIO_MODE_INPUT, GPIO_PUPD_PULLDOWN);
 
-  _up.enable_ext_interrupt();
-  _down.enable_ext_interrupt();
-  _left.enable_ext_interrupt();
-  _right.enable_ext_interrupt();
-  _center.enable_ext_interrupt();
+  _up.enable_ext_interrupt(EXTI_TRIGGER_BOTH);
+  _down.enable_ext_interrupt(EXTI_TRIGGER_BOTH);
+  _left.enable_ext_interrupt(EXTI_TRIGGER_BOTH);
+  _right.enable_ext_interrupt(EXTI_TRIGGER_BOTH);
+  _center.enable_ext_interrupt(EXTI_TRIGGER_BOTH);
 }

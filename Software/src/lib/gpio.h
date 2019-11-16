@@ -4,6 +4,8 @@
 #include <cstdint>
 
 #include <libopencm3/stm32/gpio.h>
+#include <libopencm3/stm32/exti.h>
+#include <array>
 
 #include "helper.h"
 
@@ -28,22 +30,25 @@ class gpio {
     void setup(std::uint8_t mode, std::uint8_t pupd);
     void output_opts(std::uint8_t otype, std::uint8_t speed);
     void set_af(uint8_t af_num);
-    void enable_ext_interrupt();
+    void enable_ext_interrupt(exti_trigger_type type);
 
     void state(bool new_state);
     void toggle();
 
     bool get();
     uint8_t get_pin_num() const;
+    exti_trigger_type get_exti_trigger_type() const;
 
     volatile mmio *handle();
 
     const std::uint32_t port;
     const std::uint16_t pin;
 
-    static void (*pin_callback[16])();
-    static void callback_nop();
+    static std::array<void (*)(bool state), 16> pin_callback;
+    static std::array<gpio*, 16> exti_pins;
+    static void callback_nop(bool);
 
   private:
     std::uint8_t _pin_num = 0;
+    exti_trigger_type _trigger_type = EXTI_TRIGGER_BOTH;
 };
