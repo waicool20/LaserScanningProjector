@@ -46,18 +46,31 @@ int main() {
   lv_obj_t * label = lv_label_create(btn, NULL);          /*Add a label to the button*/
   lv_label_set_text(label, "Button");                     /*Set the labels text*/
 
+  lv_obj_t* btn2 = lv_btn_create(lv_scr_act(), NULL);     /*Add a button the current screen*/
+  lv_obj_set_pos(btn2, 20, 50);                            /*Set its position*/
+  lv_obj_set_size(btn2, 50, 20);                          /*Set its size*/
+
+  lv_obj_t * label2 = lv_label_create(btn2, NULL);          /*Add a label to the button*/
+  lv_label_set_text(label2, "Button");                     /*Set the labels text*/
+
+  lv_group_t * g = lv_group_create();
+  lv_group_add_obj(g, btn);
+  lv_group_add_obj(g, btn2);
+
+  lv_indev_set_group(ui.get_input_device(), g);
+
   gpio ldr = gpio(GPIOB, GPIO0);
 
   rcc_periph_clock_enable(RCC_GPIOA);
 
   stepper_motor xM{gpio(GPIOB, GPIO7), gpio(GPIOB, GPIO6), gpio(GPIOB, GPIO5)};
   stepper_motor yM{gpio(GPIOB, GPIO4), gpio(GPIOB, GPIO3), gpio(GPIOA, GPIO15)};
-/*  laser laser{};
+  laser laser{};
 
   laser_canvas canvas{25600, 128, 72, laser, xM, yM, ldr};
   if constexpr (use_laser) {
     canvas.home();
-  }*/
+  }
 
   while (true) {
     systick::sleep_ms(2);
