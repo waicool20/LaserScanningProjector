@@ -50,10 +50,10 @@ void ui::init() {
       btn_events.push({LV_KEY_DOWN, state});
     });
     _nav5->on_left([](bool state) {
-      btn_events.push({LV_KEY_LEFT, state});
+      btn_events.push({LV_KEY_PREV, state});
     });
     _nav5->on_right([](bool state) {
-      btn_events.push({LV_KEY_RIGHT, state});
+      btn_events.push({LV_KEY_NEXT, state});
     });
     _nav5->on_center([](bool state) {
       btn_events.push({LV_KEY_ENTER, state});
