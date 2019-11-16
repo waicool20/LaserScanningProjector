@@ -5,7 +5,6 @@ laser_canvas::laser_canvas(uint32_t spr, uint32_t width, uint32_t height, laser 
                            stepper_motor y_motor, gpio ldr)
     : _spr(spr), _width(width), _height(height), _laser(laser), _x_motor(x_motor), _y_motor(y_motor), _ldr(ldr) {
   ldr.setup(GPIO_MODE_INPUT, GPIO_PUPD_NONE);
-  home();
 }
 
 bool laser_canvas::home() {

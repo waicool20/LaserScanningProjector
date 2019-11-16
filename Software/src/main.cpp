@@ -13,9 +13,9 @@
 #include "lib/systick.h"
 
 namespace {
-}  // namespace
-
 static constexpr double PI = 3.14159265;
+constexpr bool use_laser = false;
+}  // namespace
 
 int main() {
   rcc::clock_setup_pll(rcc_hse8mhz_configs[RCC_CLOCK_HSE8_72MHZ]);
@@ -46,6 +46,9 @@ int main() {
   center.setup(GPIO_MODE_INPUT, GPIO_PUPD_PULLDOWN);
 
   laser_canvas canvas{25600, 128, 72, laser, xM, yM, ldr};
+  if constexpr (use_laser) {
+    canvas.home();
+  }
 
   lcd.draw_rect(1, 1, 32, 32, 0x00979D);
   lcd.draw_rect(1, lcd.get_height() - 33, 32, 32, 0x00979D);
@@ -76,7 +79,7 @@ int main() {
       xM.set_dir(stepper_motor::cw);
       xM.do_steps(20);
     }
-    if (center.get()) {
+    if (use_laser && center.get()) {
       //canvas.home();
       uint16_t deg = 0;
       uint16_t centx = canvas.get_width() / 2;
