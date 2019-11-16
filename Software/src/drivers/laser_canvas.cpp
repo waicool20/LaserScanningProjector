@@ -3,7 +3,7 @@
 
 laser_canvas::laser_canvas(uint32_t spr, uint32_t width, uint32_t height, laser laser, stepper_motor x_motor,
                            stepper_motor y_motor, gpio ldr)
-    : _spr(spr), _width(width), _height(height), _laser(laser), _x_motor(x_motor), _y_motor(yM), _ldr(ldr) {
+    : _spr(spr), _width(width), _height(height), _laser(laser), _x_motor(x_motor), _y_motor(y_motor), _ldr(ldr) {
   ldr.setup(GPIO_MODE_INPUT, GPIO_PUPD_NONE);
   home();
 }
@@ -24,9 +24,12 @@ bool laser_canvas::home() {
         if (_ldr.get()) {
           _x_motor.do_steps(_spr / 360);
           if (stage == stages) {
-            _x_motor.do_steps(_spr / 360);
+            _x_motor.do_steps(_spr / 70);
+            _y_motor.set_dir(stepper_motor::ccw);
+            _y_motor.do_steps(_spr / 90);
             current_x = 0;
             current_y = 0;
+            goto_xy(_width / 2, _height / 2);
             return true;
           } else {
             goto next_stage;
