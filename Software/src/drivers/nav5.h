@@ -13,11 +13,11 @@ class nav5 {
     bool read_right() { return _right.get(); }
     bool read_center() { return _center.get(); }
 
-    void on_up(void (*action)(bool state)) { gpio::pin_callback[_up.get_pin_num()] = action; }
-    void on_down(void (*action)(bool state)) { gpio::pin_callback[_down.get_pin_num()] = action; }
-    void on_left(void (*action)(bool state)) { gpio::pin_callback[_left.get_pin_num()] = action; }
-    void on_right(void (*action)(bool state)) { gpio::pin_callback[_right.get_pin_num()] = action; }
-    void on_center(void (*action)(bool state)) { gpio::pin_callback[_center.get_pin_num()] = action; }
+    void on_up(void (*action)(bool state)) { _up.set_exti_callback(action); }
+    void on_down(void (*action)(bool state)) { _down.set_exti_callback(action); }
+    void on_left(void (*action)(bool state)) { _left.set_exti_callback(action); }
+    void on_right(void (*action)(bool state)) { _right.set_exti_callback(action); }
+    void on_center(void (*action)(bool state)) { _center.set_exti_callback(action); }
   private:
     gpio _up;
     gpio _down;

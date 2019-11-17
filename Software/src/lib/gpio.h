@@ -38,17 +38,24 @@ class gpio {
     bool get();
     uint8_t get_pin_num() const;
     exti_trigger_type get_exti_trigger_type() const;
+    void set_exti_callback(void (*action)(bool));
 
     volatile mmio *handle();
 
     const std::uint32_t port;
     const std::uint16_t pin;
 
+  private:
+    friend void exti0_isr();
+    friend void exti1_isr();
+    friend void exti2_tsc_isr();
+    friend void exti3_isr();
+    friend void exti4_isr();
+    friend void exti9_5_isr();
+    friend void exti15_10_isr();
+    std::uint8_t _pin_num = 0;
+    exti_trigger_type _trigger_type = EXTI_TRIGGER_BOTH;
     static std::array<void (*)(bool state), 16> pin_callback;
     static std::array<gpio*, 16> exti_pins;
     static void callback_nop(bool);
-
-  private:
-    std::uint8_t _pin_num = 0;
-    exti_trigger_type _trigger_type = EXTI_TRIGGER_BOTH;
 };

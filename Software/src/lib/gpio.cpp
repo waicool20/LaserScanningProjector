@@ -187,3 +187,7 @@ uint8_t gpio::get_pin_num() const {
 exti_trigger_type gpio::get_exti_trigger_type() const {
   return _trigger_type;
 }
+
+void gpio::set_exti_callback(void (*action)(bool)) {
+  pin_callback[_pin_num] = action;
+}
