@@ -46,6 +46,7 @@ add_executable(${PROJECT_NAME}.elf
         src/drivers/laser.cpp
         src/drivers/laser_canvas.cpp
         src/drivers/nav5.cpp
+        src/drivers/sdcard.cpp
         src/lib/gpio.cpp
         src/lib/rcc.cpp
         src/lib/systick.cpp
@@ -65,7 +66,8 @@ target_link_libraries(${PROJECT_NAME}.elf PRIVATE
         ${LDLIBS}
         c
         rdimon
-        LVGL)
+        LVGL
+        FF14)
 
 # Add a secondary target to generate a bin file from the elf file.
 add_custom_target(
