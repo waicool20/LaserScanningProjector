@@ -6,6 +6,8 @@
 
 st7735s *ui::_lcd = nullptr;
 nav5 *ui::_nav5 = nullptr;
+lv_indev_t *ui::_input_device = nullptr;
+lv_disp_t *ui::_display = nullptr;
 lv_disp_buf_t ui::disp_buf = lv_disp_buf_t{};
 lv_color_t ui::buf1[LV_HOR_RES_MAX * 10];
 circular_queue<ui::btn_event, 10> ui::btn_events{};
@@ -17,12 +19,10 @@ extern "C" void tim6_dac_isr() {
   }
 }
 
-ui::ui(st7735s *lcd, nav5 *nav5) {
+void ui::init(st7735s *lcd, nav5 *nav5) {
   _lcd = lcd;
   _nav5 = nav5;
-}
 
-void ui::init() {
   // Init Timer, 5ms ticks
   {
     rcc::periph_clock_enable(RCC_TIM6);
@@ -68,13 +68,13 @@ void ui::init() {
   lv_disp_drv_init(&disp_drv);                /*Basic initialization*/
   disp_drv.flush_cb = flush_lcd;              /*Set driver function*/
   disp_drv.buffer = &disp_buf;                /*Assign the buffer to the display*/
-  display = lv_disp_drv_register(&disp_drv);  /*Finally register the driver*/
+  _display = lv_disp_drv_register(&disp_drv);  /*Finally register the driver*/
 
   lv_indev_drv_t indev_drv;
   lv_indev_drv_init(&indev_drv);              /*Descriptor of a input device driver*/
   indev_drv.type = LV_INDEV_TYPE_KEYPAD;      /*Touch pad is a pointer-like device*/
   indev_drv.read_cb = nav5_read;              /*Set your driver function*/
-  input_device = lv_indev_drv_register(&indev_drv);   /*Finally register the driver*/
+  _input_device = lv_indev_drv_register(&indev_drv);   /*Finally register the driver*/
 }
 
 void ui::flush_lcd(_disp_drv_t *disp_drv, const lv_area_t *area, lv_color_t *color_p) {

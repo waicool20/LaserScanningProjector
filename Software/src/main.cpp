@@ -36,8 +36,7 @@ int main() {
       gpio(GPIOB, GPIO9)
   };
 
-  ui ui { &lcd, &nav5 };
-  ui.init();
+  ui::init(&lcd, &nav5);
 
   lv_obj_t* btn = lv_btn_create(lv_scr_act(), NULL);     /*Add a button the current screen*/
   lv_obj_set_pos(btn, 20, 20);                            /*Set its position*/
@@ -57,7 +56,7 @@ int main() {
   lv_group_add_obj(g, btn);
   lv_group_add_obj(g, btn2);
 
-  lv_indev_set_group(ui.get_input_device(), g);
+  lv_indev_set_group(ui::get_input_device(), g);
 
   gpio ldr = gpio(GPIOB, GPIO0);
 
