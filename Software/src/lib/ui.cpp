@@ -3,6 +3,7 @@
 #include "ui.h"
 #include "rcc.h"
 #include <lvgl.h>
+#include <lv_style.h>
 
 st7735s *ui::_lcd = nullptr;
 nav5 *ui::_nav5 = nullptr;
@@ -61,6 +62,20 @@ void ui::init(st7735s *lcd, nav5 *nav5) {
   }
 
   lv_init();
+
+  /*Init Theme*/
+  lv_theme_t* th = lv_theme_alien_init(120, NULL);
+  th->style.cont->body.padding.left = 6;
+  th->style.cont->body.padding.right = 6;
+  th->style.cont->body.padding.top = 6;
+  th->style.cont->body.padding.bottom = 6;
+  th->style.btn.ina->body.radius = 5;
+  th->style.btn.pr->body.radius = 5;
+  th->style.btn.rel->body.radius = 5;
+  th->style.btn.tgl_pr->body.radius = 5;
+  th->style.btn.tgl_rel->body.radius = 5;
+  lv_theme_set_current(th);
+
   /*Initialize the display buffer*/
   lv_disp_buf_init(&disp_buf, ui::buf1, nullptr, LV_HOR_RES_MAX);
 
