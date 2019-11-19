@@ -13,7 +13,7 @@
 #include "drivers/stepper_motor.h"
 #include "lib/rcc.h"
 #include "lib/systick.h"
-#include "../middleware/lvgl/src/lv_core/lv_style.h"
+#include <lv_core/lv_style.h>
 
 namespace {
   static constexpr double PI = 3.14159265;

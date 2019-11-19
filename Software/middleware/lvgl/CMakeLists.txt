@@ -175,7 +175,9 @@ add_library(LVGL
 target_compile_options(LVGL PRIVATE
         ${TARGET_SPECIFIC_FLAGS}
         ${ADDITIONAL_C_FLAGS})
-target_include_directories(LVGL SYSTEM PUBLIC lvgl)
+target_include_directories(LVGL SYSTEM PUBLIC
+        lvgl
+        lvgl/src)
 target_link_options(LVGL PRIVATE
         ${LINKER_FLAGS}
         ${ADDITIONAL_LINKER_FLAGS})

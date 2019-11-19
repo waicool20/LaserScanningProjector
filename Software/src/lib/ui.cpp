@@ -3,7 +3,7 @@
 #include "ui.h"
 #include "rcc.h"
 #include <lvgl.h>
-#include <lv_style.h>
+#include <lv_core/lv_style.h>
 
 st7735s *ui::_lcd = nullptr;
 nav5 *ui::_nav5 = nullptr;
