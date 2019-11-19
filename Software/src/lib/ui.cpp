@@ -2,7 +2,7 @@
 #include <libopencm3/stm32/timer.h>
 #include "ui.h"
 #include "rcc.h"
-#include "../../middleware/lvgl/lvgl.h"
+#include <lvgl.h>
 
 st7735s *ui::_lcd = nullptr;
 nav5 *ui::_nav5 = nullptr;

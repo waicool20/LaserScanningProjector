@@ -2,5 +2,5 @@
 	path = Software/libopencm3
 	url = https://github.com/libopencm3/libopencm3.git
 [submodule "Software/middleware/lvgl"]
-	path = Software/middleware/lvgl
+	path = Software/middleware/lvgl/lvgl
 	url = https://github.com/littlevgl/lvgl.git

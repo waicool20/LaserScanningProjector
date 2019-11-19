@@ -21,6 +21,8 @@ set(ADDITIONAL_COMMON_FLAGS
         -ffunction-sections
         -fdata-sections
         -fsigned-char)
+set(ADDITIONAL_C_FLAGS
+        ${ADDITIONAL_COMMON_FLAGS})
 set(ADDITIONAL_CXX_FLAGS
         ${ADDITIONAL_COMMON_FLAGS}
         -fno-exceptions
@@ -32,7 +34,8 @@ set(ADDITIONAL_LINKER_FLAGS
         -Wl,--gc-sections)
 
 # Additional Libraries
-include(cmake/lvgl.cmake)
+#include(cmake/lvgl.cmake)
+add_subdirectory(middleware/lvgl)
 
 message("----------------------------------------")
 

@@ -3,7 +3,7 @@
 
 #include <drivers/st7735s.h>
 #include <drivers/nav5.h>
-#include "../../middleware/lvgl/lvgl.h"
+#include <lvgl.h>
 #include "circular_queue.h"
 
 using namespace rtlib::util;
