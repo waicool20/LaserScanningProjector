@@ -34,7 +34,7 @@ set(ADDITIONAL_LINKER_FLAGS
         -Wl,--gc-sections)
 
 # Additional Libraries
-#include(cmake/lvgl.cmake)
+add_subdirectory(middleware/ff14)
 add_subdirectory(middleware/lvgl)
 
 message("----------------------------------------")
@@ -51,6 +51,7 @@ add_executable(${PROJECT_NAME}.elf
         src/lib/rcc.cpp
         src/lib/systick.cpp
         src/lib/ui.cpp
+        src/lib/usb_cdcacm.cpp
         src/lib/circular_queue.h)
 
 add_dependencies(${PROJECT_NAME}.elf libopencm3-genlink)
