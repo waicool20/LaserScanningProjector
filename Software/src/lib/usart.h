@@ -9,6 +9,7 @@ class usart {
     usart(uint32_t baudrate);
 
     uint16_t recv_blocking();
+    std::string recv_string_blocking();
     void send_blocking(uint16_t data);
     void send_blocking(std::string_view string);
   private:

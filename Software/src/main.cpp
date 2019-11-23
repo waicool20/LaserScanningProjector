@@ -80,8 +80,11 @@ int main() {
 
   usart usart{115200};
   while (true) {
-    usart.send_blocking("Hello World\n");
+    //usart.send_blocking("Hello World\n");
     systick::sleep_ms(2);
     lv_task_handler();
+    auto s = usart.recv_string_blocking();
+    usart.send_blocking(std::string_view{s});
+    lv_label_set_text(label, s.c_str());
   }
 }

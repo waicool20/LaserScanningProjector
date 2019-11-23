@@ -26,6 +26,17 @@ uint16_t usart::recv_blocking() {
   return usart_recv_blocking(_usart);
 }
 
+std::string usart::recv_string_blocking() {
+  uint8_t data;
+  std::string string {};
+  while(true) {
+    data = recv_blocking();
+    string.push_back(static_cast<char>(data));
+    if (data == '\n') break;
+  }
+  return string;
+}
+
 void usart::send_blocking(uint16_t data) {
   usart_send_blocking(_usart, data);
 }
