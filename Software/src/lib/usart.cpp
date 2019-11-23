@@ -27,16 +27,16 @@ uint16_t usart::recv_blocking() {
 }
 
 uint32_t usart::recv_string_blocking(char* string, uint32_t len) {
-  uint8_t data;
-  uint32_t read;
-  for (read = 0; read < len; read++) {
-    data = recv_blocking();
+  std::uint32_t read;
+  for (read = 0; read < len - 1; read++) {
+    std::uint8_t data = recv_blocking();
     if (data == '\n'){
-      string[read] = '\0';
       break;
     }
     string[read] = static_cast<char>(data);
   }
+  string[read] = '\0';
+
   return read;
 }
 

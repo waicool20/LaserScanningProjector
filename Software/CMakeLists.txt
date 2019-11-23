@@ -53,6 +53,7 @@ add_executable(${PROJECT_NAME}.elf
         src/lib/rcc.cpp
         src/lib/systick.cpp
         src/lib/usart.cpp
+        src/lib/usb_cdcacm.cpp
         src/lib/ui.cpp
 
         src/lib/lvgl/button.cpp
