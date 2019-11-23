@@ -38,5 +38,6 @@ void stepper_motor::do_steps(std::uint32_t steps) {
     _step_.state(true);
     systick::sleep_us(2);
     _step_.state(false);
+    systick::sleep_us(2);
   }
 }
