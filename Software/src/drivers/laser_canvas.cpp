@@ -52,7 +52,7 @@ bool laser_canvas::home() {
 }
 
 void laser_canvas::goto_xy(std::uint32_t x, std::uint32_t y) {
-  if (x > _width || y > _height) { return; }
+  if (x >= _width || y >= _height) { return; }
   auto dx = std::int32_t(x - current_x);
   auto dy = std::int32_t(y - current_y);
   _x_motor.set_dir(dx > 0 ? stepper_motor::cw : stepper_motor::ccw);
