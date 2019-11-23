@@ -51,6 +51,8 @@ add_executable(${PROJECT_NAME}.elf
         src/lib/rcc.cpp
         src/lib/systick.cpp
         src/lib/ui.cpp
+        src/lib/ui_obj.cpp
+        src/lib/ui_container.cpp
         src/lib/circular_queue.h)
 
 add_dependencies(${PROJECT_NAME}.elf libopencm3-genlink)
