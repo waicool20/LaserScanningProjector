@@ -26,15 +26,18 @@ uint16_t usart::recv_blocking() {
   return usart_recv_blocking(_usart);
 }
 
-std::string usart::recv_string_blocking() {
+uint32_t usart::recv_string_blocking(char* string, uint32_t len) {
   uint8_t data;
-  std::string string {};
-  while(true) {
+  uint32_t read;
+  for (read = 0; read < len; read++) {
     data = recv_blocking();
-    string.push_back(static_cast<char>(data));
-    if (data == '\n') break;
+    if (data == '\n'){
+      string[read] = '\0';
+      break;
+    }
+    string[read] = static_cast<char>(data);
   }
-  return string;
+  return read;
 }
 
 void usart::send_blocking(uint16_t data) {
@@ -44,5 +47,17 @@ void usart::send_blocking(uint16_t data) {
 void usart::send_blocking(std::string_view sv) {
   for (char c : sv) {
     send_blocking(static_cast<unsigned char>(c));
+  }
+}
+
+void usart::send_blocking(char *string, uint32_t len) {
+  char data;
+  for(uint32_t i = 0; i < len; i++) {
+    data = string[i];
+    if (data == '\0') {
+      send_blocking('\n');
+      break;
+    }
+    send_blocking(static_cast<uint16_t>(data));
   }
 }

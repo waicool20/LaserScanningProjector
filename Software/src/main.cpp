@@ -78,13 +78,15 @@ int main() {
     canvas.home();
   }
 
+  char string[16];
+
   usart usart{115200};
   while (true) {
     //usart.send_blocking("Hello World\n");
     systick::sleep_ms(2);
     lv_task_handler();
-    auto s = usart.recv_string_blocking();
-    usart.send_blocking(std::string_view{s});
-    lv_label_set_text(label, s.c_str());
+    usart.recv_string_blocking(string, 16);
+    usart.send_blocking(std::string_view{string});
+    lv_label_set_text(label, string);
   }
 }
