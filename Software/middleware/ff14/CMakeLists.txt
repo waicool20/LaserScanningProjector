@@ -14,8 +14,7 @@ add_library(FF14
         ${FF14_SOURCES})
 target_compile_options(FF14 PRIVATE
         ${TARGET_SPECIFIC_FLAGS}
-        ${ADDITIONAL_C_FLAGS}
-        ${C_WARN_FLAGS})
+        ${ADDITIONAL_C_FLAGS})
 target_include_directories(FF14 SYSTEM PUBLIC source)
 target_link_options(FF14 PRIVATE
         ${LINKER_FLAGS}

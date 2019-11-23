@@ -2,19 +2,22 @@
 
 #include <libopencm3/stm32/gpio.h>
 #include <libopencm3/stm32/rcc.h>
-#include <libopencm3/stm32/spi.h>
-#include <drivers/st7735s.h>
-#include <drivers/laser.h>
-#include <algorithm>
-#include <drivers/laser_canvas.h>
-#include <lib/ui.h>
-#include <drivers/nav5.h>
 
+#include "drivers/laser.h"
+#include "drivers/laser_canvas.h"
+#include "drivers/nav5.h"
 #include "drivers/stepper_motor.h"
+#include "drivers/st7735s.h"
 #include "lib/rcc.h"
 #include "lib/systick.h"
-#include <lv_core/lv_style.h>
+#include "lib/ui.h"
+#include "lib/lvgl/button.h"
+#include "lib/lvgl/container.h"
+#include "lib/lvgl/group.h"
+#include "lib/lvgl/label.h"
 #include <lib/usart.h>
+
+using namespace std::literals;
 
 namespace {
   static constexpr double PI = 3.14159265;
@@ -39,31 +42,31 @@ int main() {
   };
 
   ui::init(&lcd, &nav5);
-  lv_obj_t *cont = lv_cont_create(lv_scr_act(), NULL);
-  lv_obj_set_auto_realign(cont, true);                    /*Auto realign when the size changes*/
-  lv_obj_align_origo(cont, NULL, LV_ALIGN_CENTER, 0, 0);  /*This parametrs will be sued when realigned*/
-  lv_cont_set_fit2(cont, LV_FIT_FLOOD, LV_FIT_FLOOD);
-  lv_cont_set_layout(cont, LV_LAYOUT_PRETTY);
+  auto cont = lvgl::container();
+  cont.auto_realign(true);  /*Auto realign when the size changes*/
+  cont.align_origin(nullptr, LV_ALIGN_CENTER, 0, 0);  /*This parametrs will be sued when realigned*/
+  cont.fit2(LV_FIT_FLOOD, LV_FIT_FLOOD);
+  cont.layout(LV_LAYOUT_PRETTY);
 
-  lv_obj_t *btn = lv_btn_create(cont, NULL);     /*Add a button the current screen*/
-  lv_obj_set_pos(btn, 20, 20);                            /*Set its position*/
-  lv_obj_set_size(btn, 50, 50);                          /*Set its size*/
+  auto btn = lvgl::button(cont);  /*Add a button the current screen*/
+  btn.pos(20, 20);  /* Set its position */
+  btn.size(50, 50);  /* Set its size */
 
-  lv_obj_t *label = lv_label_create(btn, NULL);          /*Add a label to the button*/
-  lv_label_set_text(label, "Button");                     /*Set the labels text*/
+  auto label = lvgl::label(btn);  /*Add a label to the button*/
+  label.text("Button"sv);  /*Set the labels text*/
 
-  lv_obj_t *btn2 = lv_btn_create(cont, NULL);     /*Add a button the current screen*/
-  lv_obj_set_pos(btn2, 20, 50);                            /*Set its position*/
-  lv_obj_set_size(btn2, 50, 50);                          /*Set its size*/
+  auto btn2 = lvgl::button(cont);  /*Add a button the current screen*/
+  btn2.pos(20, 50);  /*Set its position*/
+  btn2.size(50, 50);  /*Set its size*/
 
-  lv_obj_t *label2 = lv_label_create(btn2, NULL);          /*Add a label to the button*/
-  lv_label_set_text(label2, "Button");                     /*Set the labels text*/
+  auto label2 = lvgl::label(btn2);  /*Add a label to the button*/
+  label2.text("Button"sv);  /*Set the labels text*/
 
-  lv_group_t *g = lv_group_create();
-  lv_group_add_obj(g, btn);
-  lv_group_add_obj(g, btn2);
+  auto g = lvgl::group();
+  g.add(btn);
+  g.add(btn2);
 
-  lv_indev_set_group(ui::get_input_device(), g);
+  lv_indev_set_group(ui::get_input_device(), g.get());
 
   gpio ldr = gpio(GPIOB, GPIO0);
 
@@ -82,11 +85,11 @@ int main() {
 
   usart usart{115200};
   while (true) {
+    systick::sleep(2ms);
     //usart.send_blocking("Hello World\n");
-    systick::sleep_ms(2);
     lv_task_handler();
     usart.recv_string_blocking(string, 16);
     usart.send_blocking(std::string_view{string});
-    lv_label_set_text(label, string);
+    label.text(std::string_view{string});
   }
 }
