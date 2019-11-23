@@ -14,6 +14,7 @@
 #include "lib/rcc.h"
 #include "lib/systick.h"
 #include <lv_core/lv_style.h>
+#include <lib/usart.h>
 
 namespace {
   static constexpr double PI = 3.14159265;
@@ -38,7 +39,7 @@ int main() {
   };
 
   ui::init(&lcd, &nav5);
-  lv_obj_t* cont = lv_cont_create(lv_scr_act(), NULL);
+  lv_obj_t *cont = lv_cont_create(lv_scr_act(), NULL);
   lv_obj_set_auto_realign(cont, true);                    /*Auto realign when the size changes*/
   lv_obj_align_origo(cont, NULL, LV_ALIGN_CENTER, 0, 0);  /*This parametrs will be sued when realigned*/
   lv_cont_set_fit2(cont, LV_FIT_FLOOD, LV_FIT_FLOOD);
@@ -77,7 +78,9 @@ int main() {
     canvas.home();
   }
 
+  usart usart{115200};
   while (true) {
+    usart.send_blocking("Hello World\n");
     systick::sleep_ms(2);
     lv_task_handler();
   }
