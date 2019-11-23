@@ -1,5 +1,4 @@
 EESchema Schematic File Version 4
-LIBS:LaserScanningProjector-cache
 EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
@@ -7,7 +6,7 @@ encoding utf-8
 Sheet 1 3
 Title "Laser Scanning Projector"
 Date ""
-Rev "v1.0"
+Rev "v1.0.1"
 Comp "ELEC 3300 Group 26"
 Comment1 "Licensed under Creative Commons Attribution-ShareAlike 4.0 International"
 Comment2 "Mak Ching Hang David ( 20389036 )"
@@ -589,9 +588,9 @@ Wire Wire Line
 Connection ~ 3850 7300
 Wire Wire Line
 	3850 7300 3850 7350
-Text GLabel 3250 6850 0    50   Input ~ 0
+Text GLabel 3000 6800 1    50   Input ~ 0
 USB_DP
-Text GLabel 3250 6950 0    50   Input ~ 0
+Text GLabel 3000 7000 3    50   Input ~ 0
 USB_DM
 $Comp
 L power:+5V #PWR015
@@ -638,25 +637,14 @@ Wire Wire Line
 	4200 7300 3950 7300
 Connection ~ 3950 7300
 $Comp
-L Device:R R8
-U 1 1 5DD82055
-P 3400 6850
-F 0 "R8" V 3300 6800 50  0000 C CNN
-F 1 "22" V 3400 6850 50  0000 C CNN
-F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" V 3330 6850 50  0001 C CNN
-F 3 "~" H 3400 6850 50  0001 C CNN
-	1    3400 6850
-	0    1    1    0   
-$EndComp
-$Comp
 L Device:R R9
 U 1 1 5DD89756
-P 3400 6950
-F 0 "R9" V 3500 6900 50  0000 C CNN
-F 1 "22" V 3400 6950 50  0000 C CNN
-F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" V 3330 6950 50  0001 C CNN
-F 3 "~" H 3400 6950 50  0001 C CNN
-	1    3400 6950
+P 3250 6950
+F 0 "R9" V 3300 6800 50  0000 C CNN
+F 1 "22" V 3250 6950 50  0000 C CNN
+F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" V 3180 6950 50  0001 C CNN
+F 3 "~" H 3250 6950 50  0001 C CNN
+	1    3250 6950
 	0    1    1    0   
 $EndComp
 Wire Notes Line
@@ -2050,4 +2038,50 @@ F 3 "~" H 4050 1850 50  0001 C CNN
 	1    4050 1850
 	1    0    0    -1  
 $EndComp
+$Comp
+L Device:R R26
+U 1 1 5DD9EBB1
+P 3300 6650
+F 0 "R26" V 3093 6650 50  0000 C CNN
+F 1 "1k" V 3184 6650 50  0000 C CNN
+F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" V 3230 6650 50  0001 C CNN
+F 3 "~" H 3300 6650 50  0001 C CNN
+	1    3300 6650
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	3000 6850 3000 6800
+Wire Wire Line
+	3100 6850 3000 6850
+$Comp
+L Device:R R8
+U 1 1 5DD82055
+P 3250 6850
+F 0 "R8" V 3200 6700 50  0000 C CNN
+F 1 "22" V 3250 6850 50  0000 C CNN
+F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" V 3180 6850 50  0001 C CNN
+F 3 "~" H 3250 6850 50  0001 C CNN
+	1    3250 6850
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	3100 6950 3000 6950
+Wire Wire Line
+	3000 6950 3000 7000
+Wire Wire Line
+	3400 6950 3550 6950
+Wire Wire Line
+	3400 6850 3500 6850
+Wire Wire Line
+	3150 6650 3150 6750
+Wire Wire Line
+	3150 6750 3500 6750
+Wire Wire Line
+	3500 6750 3500 6850
+Connection ~ 3500 6850
+Wire Wire Line
+	3500 6850 3550 6850
+Wire Wire Line
+	3450 6650 3500 6650
+Connection ~ 3500 6650
 $EndSCHEMATC

@@ -1,5 +1,4 @@
 EESchema Schematic File Version 4
-LIBS:LaserScanningProjector-cache
 EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
@@ -7,7 +6,7 @@ encoding utf-8
 Sheet 3 3
 Title "Laser Scanning Projector"
 Date ""
-Rev "v1.0"
+Rev "v1.0.1"
 Comp "ELEC 3300 Group 26"
 Comment1 "Licensed under Creative Commons Attribution-ShareAlike 4.0 International"
 Comment2 "Mak Ching Hang David ( 20389036 )"
