@@ -21,7 +21,7 @@ using namespace std::literals;
 
 namespace {
   static constexpr double PI = 3.14159265;
-  constexpr bool use_laser = false;
+  constexpr bool use_laser = true;
 }  // namespace
 
 int main() {
@@ -82,14 +82,10 @@ int main() {
   }
 
   char string[16];
-
-  usart usart{115200};
   while (true) {
-    systick::sleep(2ms);
-    //usart.send_blocking("Hello World\n");
-    lv_task_handler();
-    usart.recv_string_blocking(string, 16);
-    usart.send_blocking(std::string_view{string});
-    label.text(std::string_view{string});
+//    lv_task_handler();
+    canvas.highlight_canvas_area();
+
+//    systick::sleep(2ms);
   }
 }

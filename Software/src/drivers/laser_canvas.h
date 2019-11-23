@@ -32,6 +32,7 @@ class laser_canvas {
   bool home();
 
   void goto_xy(std::uint32_t x, std::uint32_t y);
+  void highlight_canvas_area();
 
   [[nodiscard]] std::uint32_t get_current_x() const;
   [[nodiscard]] std::uint32_t get_current_y() const;

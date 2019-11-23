@@ -1,6 +1,8 @@
 #include "laser_canvas.h"
 #include <lib/systick.h>
 
+using namespace std::chrono_literals;
+
 laser_canvas::laser_canvas(std::uint32_t spr,
                            std::uint32_t width,
                            std::uint32_t height,
@@ -61,6 +63,29 @@ void laser_canvas::goto_xy(std::uint32_t x, std::uint32_t y) {
   _y_motor.do_steps(std::uint32_t(std::abs(dy)));
   current_x = x;
   current_y = y;
+}
+
+void laser_canvas::highlight_canvas_area() {
+  _laser.disable();
+  goto_xy(0, 0);
+  _laser.enable();
+  systick::sleep(10ms);
+  goto_xy(0, _height - 1);
+  systick::sleep(10ms);
+  goto_xy(_width - 1, _height - 1);
+  systick::sleep(10ms);
+  goto_xy(_width - 1, 0);
+  systick::sleep(10ms);
+  goto_xy(0, 0);
+  systick::sleep(10ms);
+  goto_xy(_width - 1, _height - 1);
+  systick::sleep(10ms);
+  _laser.disable();
+  goto_xy(_width - 1, 0);
+  _laser.enable();
+  systick::sleep(10ms);
+  goto_xy(0, _height - 1);
+  systick::sleep(10ms);
 }
 
 std::uint32_t laser_canvas::get_width() const {
