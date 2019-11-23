@@ -28,7 +28,7 @@ int main() {
   rcc_periph_clock_enable(RCC_GPIOC);
   rcc_periph_clock_enable(RCC_GPIOB);
 
-  st7735s lcd{2, 1, 128, 160, st7735s::COLOR_MODE_18_BITS};
+  st7735s lcd{0, 0, 128, 160, st7735s::COLOR_MODE_18_BITS};
   nav5 nav5{
       gpio(GPIOC, GPIO15),
       gpio(GPIOC, GPIO13),
