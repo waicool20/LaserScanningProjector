@@ -1,4 +1,3 @@
-#include <libopencm3/cm3/nvic.h>
 #include "gpio.h"
 #include "rcc.h"
 

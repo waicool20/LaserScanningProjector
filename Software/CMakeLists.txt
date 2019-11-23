@@ -41,19 +41,24 @@ message("----------------------------------------")
 
 add_executable(${PROJECT_NAME}.elf
         src/main.cpp
-        src/drivers/st7735s.cpp
-        src/drivers/stepper_motor.cpp
         src/drivers/laser.cpp
         src/drivers/laser_canvas.cpp
         src/drivers/nav5.cpp
         src/drivers/sdcard.cpp
+        src/drivers/stepper_motor.cpp
+        src/drivers/st7735s.cpp
+
+        src/lib/circular_queue.h
         src/lib/gpio.cpp
         src/lib/rcc.cpp
         src/lib/systick.cpp
         src/lib/ui.cpp
-        src/lib/ui_obj.cpp
-        src/lib/ui_container.cpp
-        src/lib/circular_queue.h)
+
+        src/lib/lvgl/button.cpp
+        src/lib/lvgl/container.cpp
+        src/lib/lvgl/group.cpp
+        src/lib/lvgl/label.cpp
+        src/lib/lvgl/object.cpp)
 
 add_dependencies(${PROJECT_NAME}.elf libopencm3-genlink)
 target_compile_options(${PROJECT_NAME}.elf PRIVATE
