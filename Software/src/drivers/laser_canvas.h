@@ -35,6 +35,7 @@ class laser_canvas {
   void draw_frame();
   void draw_tuples();
   void highlight_canvas_area();
+  void clear() { _laser.disable(); frame_data = nullptr; }
 
   const std::uint8_t* frame_data = nullptr;
 
