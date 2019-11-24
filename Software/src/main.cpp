@@ -59,6 +59,10 @@ int main() {
       case render::BASIC_TUPLE:
         canvas.draw_tuples();
         break;
+      case render::DEBUG_HOME_LASER:
+        canvas.home();
+        rendering = render::NONE;
+        break;
       case render::NONE:
       default:
         break;

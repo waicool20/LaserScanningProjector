@@ -64,7 +64,8 @@ add_executable(${PROJECT_NAME}.elf
         src/lib/lvgl/object.cpp
 
         src/views/view_main.cpp
-        src/views/view_basic.cpp)
+        src/views/view_basic.cpp
+        src/views/view_debug.cpp)
 
 add_dependencies(${PROJECT_NAME}.elf libopencm3-genlink)
 target_compile_options(${PROJECT_NAME}.elf PRIVATE
