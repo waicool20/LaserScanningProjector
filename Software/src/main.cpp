@@ -87,11 +87,6 @@ int main() {
 
   char string[16];
   while (true) {
-//    lv_task_handler();
-//    canvas.draw_frame();
-    canvas.draw_tuples();
-//    canvas.highlight_canvas_area();
-
-//    systick::sleep(2ms);
+    canvas.highlight_canvas_area();
   }
 }
