@@ -1,11 +1,12 @@
 #pragma once
 
-#include <src/lv_core/lv_obj.h>
+#include <lvgl.h>
 
 namespace lvgl {
 
 class object {
  public:
+  explicit object(lv_obj_t* handle) : _handle_(handle) {}
   [[nodiscard]] lv_obj_t* get() const;
 
   [[nodiscard]] bool auto_relign() const;
@@ -21,11 +22,17 @@ class object {
   [[nodiscard]] lv_coord_t w() const;
   [[nodiscard]] lv_coord_t h() const;
 
- protected:
-  explicit object(lv_obj_t* handle) : _handle_(handle) {}
+  void parent(object parent) const;
+  object parent() const;
+  object screen() const;
 
+  bool hidden() const;
+  void hidden(bool hide) const;
+  void add_event_callback(lv_event_cb_t event);
  private:
   lv_obj_t* const _handle_;
 };
+
+static object active_screen() { return object(lv_scr_act()); }
 
 }  // namespace lvgl
