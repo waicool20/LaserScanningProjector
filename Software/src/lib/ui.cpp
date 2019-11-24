@@ -25,24 +25,6 @@ void ui::init(st7735s *lcd, nav5 *nav5) {
   _lcd = lcd;
   _nav5 = nav5;
 
-  // Init Timer, 5ms ticks
-  {
-    rcc::periph_clock_enable(RCC_TIM6);
-    nvic_enable_irq(NVIC_TIM6_DAC_IRQ);
-    rcc::periph_reset_pulse(RST_TIM6);
-
-    timer_set_mode(TIM6, TIM_CR1_CKD_CK_INT,
-                   TIM_CR1_CMS_EDGE, TIM_CR1_DIR_UP);
-    timer_set_prescaler(TIM6, 72000);
-    timer_disable_preload(TIM6);
-    timer_continuous_mode(TIM6);
-    timer_set_period(TIM6, 5);
-    timer_update_on_overflow(TIM6);
-    timer_enable_update_event(TIM6);
-    timer_enable_counter(TIM6);
-    timer_enable_irq(TIM6, TIM_DIER_UIE);
-  }
-
   // Init GPIO
   {
     _nav5->on_up([](bool state) {
@@ -91,6 +73,26 @@ void ui::init(st7735s *lcd, nav5 *nav5) {
   indev_drv.type = LV_INDEV_TYPE_KEYPAD;      /*Touch pad is a pointer-like device*/
   indev_drv.read_cb = nav5_read;              /*Set your driver function*/
   _input_device = lv_indev_drv_register(&indev_drv);   /*Finally register the driver*/
+
+  // Init Timer, 5ms ticks
+  // Init last so that lvgl is properly initialized first before interrupts start
+  // calling lvgls task handler
+  {
+    rcc::periph_clock_enable(RCC_TIM6);
+    nvic_enable_irq(NVIC_TIM6_DAC_IRQ);
+    rcc::periph_reset_pulse(RST_TIM6);
+
+    timer_set_mode(TIM6, TIM_CR1_CKD_CK_INT,
+                   TIM_CR1_CMS_EDGE, TIM_CR1_DIR_UP);
+    timer_set_prescaler(TIM6, 72000);
+    timer_disable_preload(TIM6);
+    timer_continuous_mode(TIM6);
+    timer_set_period(TIM6, 5);
+    timer_update_on_overflow(TIM6);
+    timer_enable_update_event(TIM6);
+    timer_enable_counter(TIM6);
+    timer_enable_irq(TIM6, TIM_DIER_UIE);
+  }
 }
 
 void ui::flush_lcd(_disp_drv_t *disp_drv, const lv_area_t *area, lv_color_t *color_p) {
