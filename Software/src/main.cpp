@@ -17,6 +17,8 @@
 #include "lib/lvgl/label.h"
 #include <lib/usart.h>
 
+#include "images/smiley.h"
+
 using namespace std::literals;
 
 namespace {
@@ -81,10 +83,14 @@ int main() {
     canvas.home();
   }
 
+  canvas.frame_data = smiley_map;
+
   char string[16];
   while (true) {
 //    lv_task_handler();
-    canvas.highlight_canvas_area();
+//    canvas.draw_frame();
+    canvas.draw_tuples();
+//    canvas.highlight_canvas_area();
 
 //    systick::sleep(2ms);
   }

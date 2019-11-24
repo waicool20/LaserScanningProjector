@@ -32,7 +32,11 @@ class laser_canvas {
   bool home();
 
   void goto_xy(std::uint32_t x, std::uint32_t y);
+  void draw_frame();
+  void draw_tuples();
   void highlight_canvas_area();
+
+  const std::uint8_t* frame_data = nullptr;
 
   [[nodiscard]] std::uint32_t get_current_x() const;
   [[nodiscard]] std::uint32_t get_current_y() const;
