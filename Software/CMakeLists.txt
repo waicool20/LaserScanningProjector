@@ -60,7 +60,8 @@ add_executable(${PROJECT_NAME}.elf
         src/lib/lvgl/container.cpp
         src/lib/lvgl/group.cpp
         src/lib/lvgl/label.cpp
-        src/lib/lvgl/object.cpp)
+        src/lib/lvgl/list.cpp
+        src/lib/lvgl/object.cpp
 
 add_dependencies(${PROJECT_NAME}.elf libopencm3-genlink)
 target_compile_options(${PROJECT_NAME}.elf PRIVATE
