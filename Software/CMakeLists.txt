@@ -63,6 +63,7 @@ add_executable(${PROJECT_NAME}.elf
         src/lib/lvgl/list.cpp
         src/lib/lvgl/object.cpp
 
+        src/views/view_init.cpp
         src/views/view_main.cpp
         src/views/view_basic.cpp
         src/views/view_debug.cpp)

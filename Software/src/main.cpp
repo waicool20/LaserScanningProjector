@@ -12,6 +12,7 @@
 #include "lib/rcc.h"
 #include "lib/systick.h"
 #include "lib/ui.h"
+#include "views/view_init.h"
 #include "views/view_main.h"
 
 #include "images/smiley.h"
@@ -44,9 +45,7 @@ int main() {
   };
 
   ui::init(&lcd, &nav5);
-  view_main::show(true);
-
-  canvas.home();
+  view_init::show(true);
 
   while (true) {
     switch (rendering) {
@@ -63,7 +62,14 @@ int main() {
         canvas.home();
         rendering = render::NONE;
         break;
+      case render::INIT_HOME_LASER:
+        canvas.home();
+        rendering = render::NONE;
+        view_init::show(false);
+        view_main::show(true);
+        break;
       case render::NONE:
+        canvas.clear();
       default:
         break;
     }
