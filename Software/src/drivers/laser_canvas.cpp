@@ -89,7 +89,7 @@ void laser_canvas::highlight_canvas_area() {
 }
 
 void laser_canvas::draw_frame() {
-  if (frame_data == nullptr) return;
+  //TODO if (frame_data == nullptr) return;
 
   static bool y_top_down = true;
   static bool x_left_right = true;
