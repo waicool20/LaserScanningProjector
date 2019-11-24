@@ -1,0 +1,54 @@
+#include "view_main.h"
+#include "view_basic.h"
+#include "lib/ui.h"
+#include "lib/lvgl/button.h"
+#include "lib/lvgl/group.h"
+#include "lib/lvgl/label.h"
+#include "lib/lvgl/list.h"
+
+using namespace std::literals;
+
+bool view_main::created = false;
+
+void view_main::init() {
+  if (created) return;
+  input_group().add(list());
+  list().hidden(true);
+  list().size(list().screen().w(), list().screen().h());
+  auto basic_btn = list().add_btn("Basic"sv);
+  list().add_btn("USB"sv);
+  list().add_btn("Audio"sv);
+  list().add_btn("Debug"sv);
+
+  basic_btn.add_event_callback(basic_btn_cb);
+  created = true;
+}
+
+void view_main::show(bool show) {
+  if (show) {
+    init();
+    list().hidden(false);
+    lv_indev_set_group(ui::get_input_device(), input_group().get());
+  } else {
+    list().hidden(true);
+  }
+}
+
+lvgl::list &view_main::list() {
+  static lvgl::list _list;
+  return _list;
+}
+
+lvgl::group &view_main::input_group() {
+  static lvgl::group _group;
+  return _group;
+}
+
+void view_main::basic_btn_cb(lv_obj_t * obj, lv_event_t event) {
+  switch(event) {
+    case LV_EVENT_PRESSED:
+      show(false);
+      view_basic::show(true);
+      break;
+  }
+}

@@ -3,6 +3,7 @@
 #include <libopencm3/stm32/gpio.h>
 #include <libopencm3/stm32/rcc.h>
 
+#include "main.h"
 #include "drivers/laser.h"
 #include "drivers/laser_canvas.h"
 #include "drivers/nav5.h"
@@ -11,20 +12,14 @@
 #include "lib/rcc.h"
 #include "lib/systick.h"
 #include "lib/ui.h"
-#include "lib/lvgl/button.h"
-#include "lib/lvgl/container.h"
-#include "lib/lvgl/group.h"
-#include "lib/lvgl/label.h"
-#include <lib/usart.h>
+#include "views/view_main.h"
+#include "views/view_basic.h"
 
 #include "images/smiley.h"
 
 using namespace std::literals;
 
-namespace {
-  static constexpr double PI = 3.14159265;
-  constexpr bool use_laser = true;
-}  // namespace
+render rendering = render::NONE;
 
 int main() {
   rcc::clock_setup_pll(rcc_hse8mhz_configs[RCC_CLOCK_HSE8_72MHZ]);
@@ -44,49 +39,32 @@ int main() {
   };
 
   ui::init(&lcd, &nav5);
-  auto cont = lvgl::container();
-  cont.auto_realign(true);  /*Auto realign when the size changes*/
-  cont.align_origin(nullptr, LV_ALIGN_CENTER, 0, 0);  /*This parametrs will be sued when realigned*/
-  cont.fit2(LV_FIT_FLOOD, LV_FIT_FLOOD);
-  cont.layout(LV_LAYOUT_PRETTY);
 
-  auto btn = lvgl::button(cont);  /*Add a button the current screen*/
-  btn.pos(20, 20);  /* Set its position */
-  btn.size(50, 50);  /* Set its size */
+  view_main::show(true);
 
-  auto label = lvgl::label(btn);  /*Add a label to the button*/
-  label.text("Button"sv);  /*Set the labels text*/
 
-  auto btn2 = lvgl::button(cont);  /*Add a button the current screen*/
-  btn2.pos(20, 50);  /*Set its position*/
-  btn2.size(50, 50);  /*Set its size*/
-
-  auto label2 = lvgl::label(btn2);  /*Add a label to the button*/
-  label2.text("Button"sv);  /*Set the labels text*/
-
-  auto g = lvgl::group();
-  g.add(btn);
-  g.add(btn2);
-
-  lv_indev_set_group(ui::get_input_device(), g.get());
-
-  gpio ldr = gpio(GPIOB, GPIO0);
-
-  rcc_periph_clock_enable(RCC_GPIOA);
-
+  laser laser{};
   stepper_motor xM{gpio(GPIOB, GPIO7), gpio(GPIOB, GPIO6), gpio(GPIOB, GPIO5)};
   stepper_motor yM{gpio(GPIOB, GPIO4), gpio(GPIOB, GPIO3), gpio(GPIOA, GPIO15)};
-  laser laser{};
-
+  gpio ldr = gpio(GPIOB, GPIO0);
   laser_canvas canvas{25600, 128, 72, laser, xM, yM, ldr};
-  if constexpr (use_laser) {
-    canvas.home();
-  }
 
-  canvas.frame_data = smiley_map;
+  canvas.home();
 
-  char string[16];
   while (true) {
-    canvas.highlight_canvas_area();
+    switch (rendering) {
+      case render::BASIC_RECT:
+        canvas.highlight_canvas_area();
+        break;
+      case render::BASIC_BITMAP:
+        canvas.draw_frame();
+        break;
+      case render::BASIC_TUPLE:
+        canvas.draw_tuples();
+        break;
+      case render::NONE:
+      default:
+        break;
+    }
   }
 }
