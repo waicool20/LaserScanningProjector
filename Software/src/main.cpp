@@ -13,7 +13,6 @@
 #include "lib/systick.h"
 #include "lib/ui.h"
 #include "views/view_main.h"
-#include "views/view_basic.h"
 
 #include "images/smiley.h"
 
@@ -23,11 +22,17 @@ render rendering = render::NONE;
 
 int main() {
   rcc::clock_setup_pll(rcc_hse8mhz_configs[RCC_CLOCK_HSE8_72MHZ]);
-
   systick::init();
 
-  rcc_periph_clock_enable(RCC_GPIOC);
+  rcc_periph_clock_enable(RCC_GPIOA);
   rcc_periph_clock_enable(RCC_GPIOB);
+  rcc_periph_clock_enable(RCC_GPIOC);
+
+  laser laser{};
+  stepper_motor xM{gpio(GPIOB, GPIO7), gpio(GPIOB, GPIO6), gpio(GPIOB, GPIO5)};
+  stepper_motor yM{gpio(GPIOB, GPIO4), gpio(GPIOB, GPIO3), gpio(GPIOA, GPIO15)};
+  gpio ldr = gpio(GPIOB, GPIO0);
+  laser_canvas canvas{25600, 128, 72, laser, xM, yM, ldr};
 
   st7735s lcd{0, 0, 128, 160, st7735s::COLOR_MODE_18_BITS};
   nav5 nav5{
@@ -39,15 +44,7 @@ int main() {
   };
 
   ui::init(&lcd, &nav5);
-
   view_main::show(true);
-
-
-  laser laser{};
-  stepper_motor xM{gpio(GPIOB, GPIO7), gpio(GPIOB, GPIO6), gpio(GPIOB, GPIO5)};
-  stepper_motor yM{gpio(GPIOB, GPIO4), gpio(GPIOB, GPIO3), gpio(GPIOA, GPIO15)};
-  gpio ldr = gpio(GPIOB, GPIO0);
-  laser_canvas canvas{25600, 128, 72, laser, xM, yM, ldr};
 
   canvas.home();
 
