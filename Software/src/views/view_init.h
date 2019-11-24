@@ -8,9 +8,9 @@
 
 class view_init {
   public:
-    static void init();
     static void show(bool show);
   private:
+    static void init();
     static bool created;
 
     static void start_btn_cb(lv_obj_t *obj, lv_event_t event);

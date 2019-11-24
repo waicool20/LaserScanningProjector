@@ -6,10 +6,9 @@
 
 class view_debug {
   public:
-    static void init();
     static void show(bool show);
-
   private:
+    static void init();
     static bool created;
     static lvgl::list& list();
     static lvgl::group& input_group();
