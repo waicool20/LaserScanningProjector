@@ -15,4 +15,12 @@ char* label::text() const {
   return lv_label_get_text(get());
 }
 
+lv_label_align_t label::text_align() {
+  return lv_label_get_align(get());
+}
+
+void label::text_align(lv_label_align_t align) {
+  lv_label_set_align(get(), align);
+}
+
 }  // namespace lvgl

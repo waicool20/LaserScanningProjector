@@ -12,6 +12,9 @@ class label : public object {
 
   void text(std::string_view sv) const;
   [[nodiscard]] char* text() const;
+
+  lv_label_align_t text_align();
+  void text_align(lv_label_align_t align);
 };
 
 }  // namespace lvgl
