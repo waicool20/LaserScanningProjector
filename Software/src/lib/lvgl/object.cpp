@@ -60,6 +60,10 @@ void object::hidden(bool hide) const {
   return lv_obj_set_hidden(get(), hide);
 }
 
+void object::del() {
+  lv_obj_del(get());
+}
+
 void object::add_event_callback(lv_event_cb_t action) {
   lv_obj_set_event_cb(get(), action);
 }

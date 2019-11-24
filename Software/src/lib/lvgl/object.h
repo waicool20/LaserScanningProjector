@@ -28,6 +28,7 @@ class object {
 
   bool hidden() const;
   void hidden(bool hide) const;
+  void del();
   void add_event_callback(lv_event_cb_t event);
  private:
   lv_obj_t* const _handle_;
