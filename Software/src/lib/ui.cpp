@@ -80,6 +80,8 @@ void ui::init(st7735s *lcd, nav5 *nav5) {
   {
     rcc::periph_clock_enable(RCC_TIM6);
     nvic_enable_irq(NVIC_TIM6_DAC_IRQ);
+    // Set lower priority
+    nvic_set_priority(NVIC_TIM6_DAC_IRQ, 5);
     rcc::periph_reset_pulse(RST_TIM6);
 
     timer_set_mode(TIM6, TIM_CR1_CKD_CK_INT,
