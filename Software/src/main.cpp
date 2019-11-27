@@ -74,9 +74,9 @@ int main() {
         canvas.draw_magnitude_y(mic.get_latest_value());
         break;
       case render::NONE:
+      default:
         mic.disable();
         canvas.clear();
-      default:
         break;
     }
   }
