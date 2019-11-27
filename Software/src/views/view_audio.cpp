@@ -55,6 +55,7 @@ void view_audio::back_btn_cb(lv_obj_t * obj, lv_event_t event) {
     case LV_EVENT_PRESSED:
       show(false);
       view_main::show(true);
+      rendering = render::NONE;
       break;
   }
 }

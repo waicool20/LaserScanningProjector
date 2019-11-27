@@ -49,11 +49,6 @@ int main() {
 
   mic mic{};
   while (true) {
-    if (rendering == render::AUDIO_MIC) {
-      mic.enable();
-    } else {
-      mic.disable();
-    }
     switch (rendering) {
       case render::BASIC_RECT:
         canvas.highlight_canvas_area();
@@ -75,9 +70,11 @@ int main() {
         view_main::show(true);
         break;
       case render::AUDIO_MIC:
+        mic.enable();
         canvas.draw_magnitude_y(mic.get_latest_value());
         break;
       case render::NONE:
+        mic.disable();
         canvas.clear();
       default:
         break;
