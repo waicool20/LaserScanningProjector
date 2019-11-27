@@ -14,7 +14,7 @@
 #include "lib/ui.h"
 #include "views/view_init.h"
 #include "views/view_main.h"
-
+#include "drivers/mic.h"
 #include "images/smiley.h"
 
 using namespace std::literals;
@@ -33,7 +33,7 @@ int main() {
   stepper_motor xM{gpio(GPIOB, GPIO7), gpio(GPIOB, GPIO6), gpio(GPIOB, GPIO5)};
   stepper_motor yM{gpio(GPIOB, GPIO4), gpio(GPIOB, GPIO3), gpio(GPIOA, GPIO15)};
   gpio ldr = gpio(GPIOB, GPIO0);
-  laser_canvas canvas{25600, 128, 72, laser, xM, yM, ldr};
+  laser_canvas canvas{25600, 128,  512, laser, xM, yM, ldr};
 
   st7735s lcd{0, 0, 128, 160, st7735s::COLOR_MODE_18_BITS};
   nav5 nav5{
@@ -47,7 +47,13 @@ int main() {
   ui::init(&lcd, &nav5);
   view_init::show(true);
 
+  mic mic{};
   while (true) {
+    if (rendering == render::AUDIO_MIC) {
+      mic.enable();
+    } else {
+      mic.disable();
+    }
     switch (rendering) {
       case render::BASIC_RECT:
         canvas.highlight_canvas_area();
@@ -67,6 +73,9 @@ int main() {
         rendering = render::NONE;
         view_init::show(false);
         view_main::show(true);
+        break;
+      case render::AUDIO_MIC:
+        canvas.draw_magnitude_y(mic.get_latest_value());
         break;
       case render::NONE:
         canvas.clear();

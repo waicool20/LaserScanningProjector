@@ -5,6 +5,7 @@
 #include "lib/lvgl/group.h"
 #include "lib/lvgl/label.h"
 #include "lib/lvgl/list.h"
+#include "view_audio.h"
 #include "view_debug.h"
 
 using namespace std::literals;
@@ -18,10 +19,11 @@ void view_main::init() {
   list().size(list().screen().w(), list().screen().h());
   auto basic_btn = list().add_btn("Basic"sv);
   list().add_btn("USB"sv);
-  list().add_btn("Audio"sv);
+  auto audio_btn = list().add_btn("Audio"sv);
   auto debug_btn = list().add_btn("Debug"sv);
 
   basic_btn.add_event_callback(basic_btn_cb);
+  audio_btn.add_event_callback(audio_btn_cb);
   debug_btn.add_event_callback(debug_btn_cb);
   created = true;
 }
@@ -51,6 +53,15 @@ void view_main::basic_btn_cb(lv_obj_t * obj, lv_event_t event) {
     case LV_EVENT_PRESSED:
       show(false);
       view_basic::show(true);
+      break;
+  }
+}
+
+void view_main::audio_btn_cb(lv_obj_t* obj, lv_event_t event) {
+  switch(event) {
+    case LV_EVENT_PRESSED:
+      show(false);
+      view_audio::show(true);
       break;
   }
 }

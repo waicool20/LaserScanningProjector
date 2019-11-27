@@ -6,7 +6,8 @@ enum struct render {
   BASIC_RECT,
   BASIC_BITMAP,
   DEBUG_HOME_LASER,
-  INIT_HOME_LASER
+  INIT_HOME_LASER,
+  AUDIO_MIC
 };
 
 extern render rendering;

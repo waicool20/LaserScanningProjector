@@ -34,6 +34,7 @@ class laser_canvas {
   void goto_xy(std::uint32_t x, std::uint32_t y);
   void draw_frame();
   void draw_tuples();
+  void draw_magnitude_y(float magnitude);
   void highlight_canvas_area();
   void clear() { _laser.disable(); frame_data = nullptr; }
 

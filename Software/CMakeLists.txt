@@ -47,6 +47,7 @@ add_executable(${PROJECT_NAME}.elf
         src/drivers/sdcard.cpp
         src/drivers/stepper_motor.cpp
         src/drivers/st7735s.cpp
+        src/drivers/mic.cpp
 
         src/lib/circular_queue.h
         src/lib/gpio.cpp
@@ -66,6 +67,7 @@ add_executable(${PROJECT_NAME}.elf
         src/views/view_init.cpp
         src/views/view_main.cpp
         src/views/view_basic.cpp
+        src/views/view_audio.cpp
         src/views/view_debug.cpp)
 
 add_dependencies(${PROJECT_NAME}.elf libopencm3-genlink)

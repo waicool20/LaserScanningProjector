@@ -110,7 +110,8 @@ void laser_canvas::draw_frame() {
       std::uint32_t x_byte = actual_x / 8;
       std::uint32_t x_bit = actual_x % 8;
 
-      bool laser_state = (actual_y < _height / 2 && actual_x < _width / 2) || (actual_y >= _height / 2 && actual_x >= _width / 2);
+      bool laser_state =
+          (actual_y < _height / 2 && actual_x < _width / 2) || (actual_y >= _height / 2 && actual_x >= _width / 2);
       if (prev_state != laser_state) {
         prev_state = laser_state;
         laser_state ? _laser.enable() : _laser.disable();
@@ -155,6 +156,18 @@ void laser_canvas::draw_tuples() {
   }
 
   y_top_down = !y_top_down;
+}
+
+void laser_canvas::draw_magnitude_y(float magnitude) {
+  _laser.enable();
+  uint32_t new_x = current_x + 5;
+  if (new_x >= _width) {
+    _laser.disable();
+    new_x = 0;
+  }
+  goto_xy(new_x, roundf((_height / 2) + magnitude * (_height / 2)));
+  if (new_x == 0) _laser.enable();
+  systick::sleep(10us);
 }
 
 std::uint32_t laser_canvas::get_width() const {
