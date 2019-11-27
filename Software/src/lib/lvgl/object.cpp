@@ -4,6 +4,18 @@ namespace lvgl {
 
 lv_obj_t* object::get() const { return _handle_; }
 
+void object::parent(object parent) const {
+  lv_obj_set_parent(get(), parent.get());
+}
+
+object object::parent() const {
+  return object(lv_obj_get_parent(get()));
+}
+
+object object::screen() const {
+  return object(lv_obj_get_screen(get()));
+}
+
 bool object::auto_relign() const {
   return lv_obj_get_auto_realign(get());
 }
@@ -39,5 +51,22 @@ lv_coord_t object::w() const {
 lv_coord_t object::h() const {
   return lv_obj_get_height(get());
 }
+
+bool object::hidden() const {
+  return lv_obj_get_hidden(get());
+}
+
+void object::hidden(bool hide) const {
+  return lv_obj_set_hidden(get(), hide);
+}
+
+void object::del() {
+  lv_obj_del(get());
+}
+
+void object::add_event_callback(lv_event_cb_t action) {
+  lv_obj_set_event_cb(get(), action);
+}
+
 
 }  // namespace lvgl

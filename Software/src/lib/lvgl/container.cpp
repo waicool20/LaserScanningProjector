@@ -5,6 +5,10 @@ namespace lvgl {
 container::container(lv_obj_t* parent, const container* copy)
     : object(lv_cont_create(parent, copy ? copy->get() : nullptr)) {}
 
+void container::fit(lv_fit_t policy) const {
+  lv_cont_set_fit(get(), policy);
+}
+
 void container::fit2(lv_fit_t hz_policy, lv_fit_t vt_policy) const {
   lv_cont_set_fit2(get(), hz_policy, vt_policy);
 }

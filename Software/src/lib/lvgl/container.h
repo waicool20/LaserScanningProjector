@@ -11,6 +11,7 @@ class container : public object {
  public:
   explicit container(lv_obj_t* parent = lv_scr_act(), const container* copy = nullptr);
 
+  void fit(lv_fit_t policy) const;
   void fit2(lv_fit_t hz_policy, lv_fit_t vt_policy) const;
   [[nodiscard]] lv_fit_t fit_left() const;
   [[nodiscard]] lv_fit_t fit_right() const;
