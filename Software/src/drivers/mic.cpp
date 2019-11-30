@@ -37,7 +37,7 @@ mic::mic() {
 }
 
 float mic::get_latest_value() {
-  return latest_value / float(4096) - 1;
+  return (latest_value / float(4096) - 0.5) * 2;
 }
 
 void mic::enable() {
