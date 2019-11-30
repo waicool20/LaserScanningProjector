@@ -14,6 +14,7 @@ class view_init {
     static bool created;
 
     static void start_btn_cb(lv_obj_t *obj, lv_event_t event);
+    static void skip_btn_cb(lv_obj_t *obj, lv_event_t event);
     static lvgl::container& container();
     static lvgl::label &wait_label();
 };
