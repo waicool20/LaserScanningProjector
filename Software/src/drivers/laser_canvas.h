@@ -44,6 +44,8 @@ class laser_canvas {
   [[nodiscard]] std::uint32_t get_current_y() const;
   [[nodiscard]] std::uint32_t get_width() const;
   [[nodiscard]] std::uint32_t get_height() const;
+
+  [[nodiscard]] void resize(uint32_t w, uint32_t h);
  private:
   std::uint32_t current_x = 0;
   std::uint32_t current_y = 0;
