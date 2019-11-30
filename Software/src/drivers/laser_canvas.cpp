@@ -55,6 +55,9 @@ bool laser_canvas::home() {
 
 void laser_canvas::goto_xy(std::uint32_t x, std::uint32_t y) {
   if (x >= _width || y >= _height) { return; }
+
+  static const auto max_dist = std::sqrt(float(128 * 128 + 72 * 72));
+
   auto dx = std::int32_t(x - current_x);
   auto dy = std::int32_t(y - current_y);
   _x_motor.set_dir(dx > 0 ? stepper_motor::cw : stepper_motor::ccw);
@@ -63,6 +66,9 @@ void laser_canvas::goto_xy(std::uint32_t x, std::uint32_t y) {
   _y_motor.do_steps(std::uint32_t(std::abs(dy)));
   current_x = x;
   current_y = y;
+
+  const auto dist = std::sqrt(float(dx * dx + dy * dy));
+  systick::sleep(10ms + (2ms * dist / max_dist));
 }
 
 void laser_canvas::highlight_canvas_area() {
@@ -88,15 +94,24 @@ void laser_canvas::highlight_canvas_area() {
   systick::sleep(10ms);
 }
 
-void laser_canvas::draw_frame() {
-  //TODO if (frame_data == nullptr) return;
+std::pair<std::size_t, std::uint8_t> laser_canvas::index_conversion(std::uint32_t x, std::uint32_t y) const {
+  std::uint32_t x_byte = x / 8;
+  std::uint32_t x_bit = x % 8;
+
+  return std::make_pair(y * (_width / 8) + x_byte, 7 - x_bit);
+}
+
+void laser_canvas::draw_frame(const std::uint8_t* frame_data) {
+  if (frame_data == nullptr) return;
 
   static bool y_top_down = true;
   static bool x_left_right = true;
 
   std::uint32_t cols = _width / 8;
 
+  _laser.disable();
   bool prev_state = false;
+
   for (uint32_t y = 0; y < _height; y++) {
     _y_motor.do_steps(1);
     for (uint32_t x = 0; x < _width; x++) {
@@ -104,14 +119,13 @@ void laser_canvas::draw_frame() {
 
       systick::sleep(500us);
 
-      std::uint32_t actual_y = y_top_down ? y : _height - y;
-      std::uint32_t actual_x = x_left_right ? x : _width - x;
+      std::uint32_t actual_y = y_top_down ? y : _height - y - 1;
+      std::uint32_t actual_x = x_left_right ? x : _width - x - 1;
 
-      std::uint32_t x_byte = actual_x / 8;
-      std::uint32_t x_bit = actual_x % 8;
+      const auto& [byte, bit] = index_conversion(actual_x, actual_y);
 
-      bool laser_state =
-          (actual_y < _height / 2 && actual_x < _width / 2) || (actual_y >= _height / 2 && actual_x >= _width / 2);
+      bool laser_state = (frame_data[byte] >> (bit)) & 0x1;
+      laser_state = !laser_state;
       if (prev_state != laser_state) {
         prev_state = laser_state;
         laser_state ? _laser.enable() : _laser.disable();
@@ -126,36 +140,15 @@ void laser_canvas::draw_frame() {
   y_top_down = !y_top_down;
 }
 
-void laser_canvas::draw_tuples() {
-  struct tuple {
-    std::uint32_t x;
-    std::uint32_t y;
-    bool state;
-  };
-
-  static bool y_top_down = true;
-  static bool x_left_right = true;
-  for (std::uint32_t y = 0; y < _height; ++y) {
-    std::uint32_t actual_y = y_top_down ? y : _height - y;
-
-    std::uint32_t x_begin = actual_y >= _height / 2 ? _width / 2 : 0;
-    std::uint32_t x_end = actual_y >= _height / 2 ? _width - 1 : _width / 2;
-
-    if (!x_left_right) {
-      std::swap(x_begin, x_end);
+void laser_canvas::draw_tuples(const tuple* tuples, std::size_t size) {
+  for (std::uint32_t i = 0; i < size; ++i) {
+    goto_xy(tuples[i].x, tuples[i].y);
+    if (tuples[i].state) {
+      _laser.enable();
+    } else {
+      _laser.disable();
     }
-
-    goto_xy(x_begin, actual_y);
-    systick::sleep(500us);
-    _laser.enable();
-    goto_xy(x_end, actual_y);
-    systick::sleep(7500us);
-    _laser.disable();
-
-    x_left_right = !x_left_right;
   }
-
-  y_top_down = !y_top_down;
 }
 
 void laser_canvas::draw_magnitude_y(float magnitude) {

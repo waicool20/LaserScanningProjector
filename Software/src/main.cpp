@@ -11,6 +11,7 @@
 #include "drivers/st7735s.h"
 #include "lib/rcc.h"
 #include "lib/systick.h"
+#include "lib/usb_cdcacm.h"
 #include "lib/ui.h"
 #include "views/view_init.h"
 #include "views/view_main.h"
@@ -18,6 +19,15 @@
 #include "images/smiley.h"
 
 using namespace std::literals;
+
+namespace {
+constexpr std::array<laser_canvas::tuple, 4> tuples = {{
+                                                           {0, 0, true},
+                                                           {127, 0, true},
+                                                           {127, 71, true},
+                                                           {0, 71, true}
+                                                       }};
+}  // namespace
 
 render rendering = render::NONE;
 
@@ -29,11 +39,13 @@ int main() {
   rcc_periph_clock_enable(RCC_GPIOB);
   rcc_periph_clock_enable(RCC_GPIOC);
 
+  usb_cdcacm usb;
+
   laser laser{};
   stepper_motor xM{gpio(GPIOB, GPIO7), gpio(GPIOB, GPIO6), gpio(GPIOB, GPIO5)};
   stepper_motor yM{gpio(GPIOB, GPIO4), gpio(GPIOB, GPIO3), gpio(GPIOA, GPIO15)};
   gpio ldr = gpio(GPIOB, GPIO0);
-  laser_canvas canvas{25600, 128,  512, laser, xM, yM, ldr};
+  laser_canvas canvas{25600, 128, 512, laser, xM, yM, ldr};
 
   st7735s lcd{0, 0, 128, 160, st7735s::COLOR_MODE_18_BITS};
   nav5 nav5{
@@ -49,15 +61,17 @@ int main() {
 
   mic mic{};
   while (true) {
+    usb.poll();
+
     switch (rendering) {
       case render::BASIC_RECT:
         canvas.highlight_canvas_area();
         break;
       case render::BASIC_BITMAP:
-        canvas.draw_frame();
+        canvas.draw_frame(&smiley_map[0]);
         break;
       case render::BASIC_TUPLE:
-        canvas.draw_tuples();
+        canvas.draw_tuples(tuples.data(), tuples.size());
         break;
       case render::DEBUG_HOME_LASER:
         canvas.home();

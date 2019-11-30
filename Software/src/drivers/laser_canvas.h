@@ -6,6 +6,12 @@
 
 class laser_canvas {
  public:
+  struct tuple {
+    std::uint32_t x;
+    std::uint32_t y;
+    bool state;
+  };
+
   /**
    * Main constructor for laser_canvas
    * @param spr Steps per Revolution, number of steps it takes for the stepper motors to make one revolution
@@ -32,19 +38,19 @@ class laser_canvas {
   bool home();
 
   void goto_xy(std::uint32_t x, std::uint32_t y);
-  void draw_frame();
-  void draw_tuples();
   void draw_magnitude_y(float magnitude);
+  void draw_frame(const std::uint8_t* frame_data);
+  void draw_tuples(const tuple* tuples, std::size_t size);
   void highlight_canvas_area();
-  void clear() { _laser.disable(); frame_data = nullptr; }
-
-  const std::uint8_t* frame_data = nullptr;
+  void clear() { _laser.disable(); }
 
   [[nodiscard]] std::uint32_t get_current_x() const;
   [[nodiscard]] std::uint32_t get_current_y() const;
   [[nodiscard]] std::uint32_t get_width() const;
   [[nodiscard]] std::uint32_t get_height() const;
  private:
+  [[nodiscard]] std::pair<std::size_t, std::uint8_t> index_conversion(std::uint32_t x, std::uint32_t y) const;
+
   std::uint32_t current_x = 0;
   std::uint32_t current_y = 0;
 

@@ -20,7 +20,8 @@ set(ADDITIONAL_COMMON_FLAGS
         -fmessage-length=0
         -ffunction-sections
         -fdata-sections
-        -fsigned-char)
+        -fsigned-char
+        -fno-math-errno)
 set(ADDITIONAL_C_FLAGS
         ${ADDITIONAL_COMMON_FLAGS})
 set(ADDITIONAL_CXX_FLAGS

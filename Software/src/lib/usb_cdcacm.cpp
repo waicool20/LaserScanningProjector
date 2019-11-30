@@ -47,8 +47,9 @@ void cdcacm_data_rx_cb(usbd_device* usbd_dev, uint8_t ep) {
   std::uint16_t len = usbd_ep_read_packet(usbd_dev, 0x01, buf.data(), buf.size());
 
   if (len) {
-    usbd_ep_write_packet(usbd_dev, 0x82, buf.data(), len);
-    buf[len] = 0;
+    const char* send = "\0";
+
+    usbd_ep_write_packet(usbd_dev, 0x82, send, 1);
   }
 }
 
