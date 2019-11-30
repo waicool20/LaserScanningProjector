@@ -76,6 +76,8 @@ void view_init::start_btn_cb(lv_obj_t *obj, lv_event_t event) {
       wait_label().text_align(LV_LABEL_ALIGN_CENTER);
       wait_label().align_origin(nullptr, LV_ALIGN_CENTER, 0, 0);
       break;
+    default:
+      break;
   }
 }
 
@@ -86,6 +88,8 @@ void view_init::skip_btn_cb(lv_obj_t *obj, lv_event_t event) {
       view_init::show(false);
       container().del();
       view_main::show(true);
+      break;
+    default:
       break;
   }
 }

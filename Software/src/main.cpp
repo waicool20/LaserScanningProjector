@@ -39,13 +39,11 @@ int main() {
   rcc_periph_clock_enable(RCC_GPIOB);
   rcc_periph_clock_enable(RCC_GPIOC);
 
-  usb_cdcacm usb;
-
   laser laser{};
   stepper_motor xM{gpio(GPIOB, GPIO7), gpio(GPIOB, GPIO6), gpio(GPIOB, GPIO5)};
   stepper_motor yM{gpio(GPIOB, GPIO4), gpio(GPIOB, GPIO3), gpio(GPIOA, GPIO15)};
   gpio ldr = gpio(GPIOB, GPIO0);
-  laser_canvas canvas{25600, 128, 512, laser, xM, yM, ldr};
+  laser_canvas canvas{25600, 128, 72, laser, xM, yM, ldr};
 
   st7735s lcd{0, 0, 128, 160, st7735s::COLOR_MODE_18_BITS};
   nav5 nav5{
@@ -61,8 +59,6 @@ int main() {
 
   mic mic{};
   while (true) {
-    usb.poll();
-
     switch (rendering) {
       case render::BASIC_RECT:
         canvas.highlight_canvas_area();

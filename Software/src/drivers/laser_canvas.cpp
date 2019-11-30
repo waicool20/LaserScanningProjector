@@ -1,4 +1,5 @@
 #include "laser_canvas.h"
+#include <cmath>
 #include <lib/systick.h>
 
 using namespace std::chrono_literals;
@@ -35,7 +36,7 @@ bool laser_canvas::home() {
             _y_motor.do_steps(_spr / 90);
             current_x = 0;
             current_y = 0;
-            goto_xy(_width / 2, _height / 2);
+            goto_xy(_width / 2, _height / 2, false);
             return true;
           } else {
             goto next_stage;
@@ -53,45 +54,59 @@ bool laser_canvas::home() {
   return false;
 }
 
-void laser_canvas::goto_xy(std::uint32_t x, std::uint32_t y) {
+void laser_canvas::goto_xy(std::uint32_t x, std::uint32_t y, bool no_delay = false) {
   if (x >= _width || y >= _height) { return; }
 
-  static const auto max_dist = std::sqrt(float(128 * 128 + 72 * 72));
+  static auto max_dist = std::sqrt(float(_width * _width + _height * _height));
 
-  auto dx = std::int32_t(x - current_x);
-  auto dy = std::int32_t(y - current_y);
+  const auto dx = std::int32_t(x - current_x);
+  const auto dy = std::int32_t(y - current_y);
   _x_motor.set_dir(dx > 0 ? stepper_motor::cw : stepper_motor::ccw);
   _y_motor.set_dir(dy > 0 ? stepper_motor::ccw : stepper_motor::cw);
-  _x_motor.do_steps(std::uint32_t(std::abs(dx)));
-  _y_motor.do_steps(std::uint32_t(std::abs(dy)));
+
+  {
+    const auto total_steps = std::max(std::abs(dx), std::abs(dy));
+    const auto step_dx = std::abs(float(dx) / total_steps);
+    const auto step_dy = std::abs(float(dy) / total_steps);
+    auto x_accu = 0.0f, y_accu = 0.0f;
+    for (std::int32_t i = 0; i < total_steps; ++i) {
+      const auto x_next = x_accu + step_dx;
+      const auto y_next = y_accu + step_dy;
+
+      if (std::round(x_next) > std::round(x_accu)) {
+        _x_motor.do_steps(1);
+      }
+      if (std::round(y_next) > std::round(y_accu)) {
+        _y_motor.do_steps(1);
+      }
+
+      x_accu = x_next;
+      y_accu = y_next;
+    }
+  }
+
   current_x = x;
   current_y = y;
 
-  const auto dist = std::sqrt(float(dx * dx + dy * dy));
-  systick::sleep(10ms + (2ms * dist / max_dist));
+  if (!no_delay) {
+    const auto dist = std::sqrt(float(dx * dx + dy * dy));
+    systick::sleep(6ms + (2ms * dist / max_dist));
+  }
 }
 
 void laser_canvas::highlight_canvas_area() {
   _laser.disable();
   goto_xy(0, 0);
   _laser.enable();
-  systick::sleep(10ms);
   goto_xy(0, _height - 1);
-  systick::sleep(10ms);
   goto_xy(_width - 1, _height - 1);
-  systick::sleep(10ms);
   goto_xy(_width - 1, 0);
-  systick::sleep(10ms);
   goto_xy(0, 0);
-  systick::sleep(10ms);
   goto_xy(_width - 1, _height - 1);
-  systick::sleep(10ms);
   _laser.disable();
   goto_xy(_width - 1, 0);
   _laser.enable();
-  systick::sleep(10ms);
   goto_xy(0, _height - 1);
-  systick::sleep(10ms);
 }
 
 std::pair<std::size_t, std::uint8_t> laser_canvas::index_conversion(std::uint32_t x, std::uint32_t y) const {
@@ -102,12 +117,10 @@ std::pair<std::size_t, std::uint8_t> laser_canvas::index_conversion(std::uint32_
 }
 
 void laser_canvas::draw_frame(const std::uint8_t* frame_data) {
-  if (frame_data == nullptr) return;
+  if (frame_data == nullptr) { return; }
 
   static bool y_top_down = true;
   static bool x_left_right = true;
-
-  std::uint32_t cols = _width / 8;
 
   _laser.disable();
   bool prev_state = false;
@@ -122,7 +135,7 @@ void laser_canvas::draw_frame(const std::uint8_t* frame_data) {
       std::uint32_t actual_y = y_top_down ? y : _height - y - 1;
       std::uint32_t actual_x = x_left_right ? x : _width - x - 1;
 
-      const auto& [byte, bit] = index_conversion(actual_x, actual_y);
+      const auto&[byte, bit] = index_conversion(actual_x, actual_y);
 
       bool laser_state = (frame_data[byte] >> (bit)) & 0x1;
       laser_state = !laser_state;
@@ -158,8 +171,8 @@ void laser_canvas::draw_magnitude_y(float magnitude) {
     _laser.disable();
     new_x = 0;
   }
-  goto_xy(new_x, roundf((_height / 2) + magnitude * (_height / 2)));
-  if (new_x == 0) _laser.enable();
+  goto_xy(new_x, roundf((_height / 2) + magnitude * (_height / 2)), true);
+  if (new_x == 0) { _laser.enable(); }
   systick::sleep(10us);
 }
 
