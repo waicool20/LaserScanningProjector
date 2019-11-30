@@ -19,6 +19,11 @@
 
 using namespace std::literals;
 
+namespace {
+constexpr uint32_t default_w = 128;
+constexpr uint32_t default_h = 72;
+}
+
 render rendering = render::NONE;
 
 int main() {
@@ -33,7 +38,7 @@ int main() {
   stepper_motor xM{gpio(GPIOB, GPIO7), gpio(GPIOB, GPIO6), gpio(GPIOB, GPIO5)};
   stepper_motor yM{gpio(GPIOB, GPIO4), gpio(GPIOB, GPIO3), gpio(GPIOA, GPIO15)};
   gpio ldr = gpio(GPIOB, GPIO0);
-  laser_canvas canvas{25600, 128,  512, laser, xM, yM, ldr};
+  laser_canvas canvas{25600, default_w,  default_h, laser, xM, yM, ldr};
 
   st7735s lcd{0, 0, 128, 160, st7735s::COLOR_MODE_18_BITS};
   nav5 nav5{
@@ -51,12 +56,15 @@ int main() {
   while (true) {
     switch (rendering) {
       case render::BASIC_RECT:
+        canvas.resize(default_w,  default_h);
         canvas.highlight_canvas_area();
         break;
       case render::BASIC_BITMAP:
+        canvas.resize(default_w,  default_h);
         canvas.draw_frame();
         break;
       case render::BASIC_TUPLE:
+        canvas.resize(default_w,  default_h);
         canvas.draw_tuples();
         break;
       case render::DEBUG_HOME_LASER:
@@ -71,6 +79,7 @@ int main() {
         break;
       case render::AUDIO_MIC:
         mic.enable();
+        canvas.resize(512, 512);
         canvas.draw_magnitude_y(mic.get_latest_value());
         break;
       case render::NONE:
