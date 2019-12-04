@@ -69,8 +69,8 @@ void libusb_read(libusb_device_handle* const device_handle, std::vector<unsigned
 }
 
 struct packet {
-  std::uint8_t x;
-  std::uint8_t y;
+  std::uint16_t x;
+  std::uint16_t y;
   bool state;
 };
 
@@ -179,25 +179,36 @@ int main(int argc, char* argv[]) {
       }*/
     }
 
+    std::vector<double> distances(contours.size());
+    std::transform(contours.begin(), contours.end(), distances.begin(), [](const std::vector<cv::Point>& vp) {
+      const double x = vp.back().x - vp.front().x;
+      const double y = vp.back().y - vp.back().y;
+      return std::sqrt(x * x + y * y);
+    });
+    accumulator = std::accumulate(distances.begin(), distances.end(), 0.0);
+    fmt::print("Displaying Edges: {}, Distance: {}\n", contours.size(), accumulator);
     for (const auto& line : contours) {
       const auto last = --line.end();
 
       for (auto it = line.begin(); it != line.end(); ++it) {
         const bool state = it != last;
         const packet p = {
-            std::uint8_t(it->x),
-            std::uint8_t(it->y),
+            std::uint16_t(it->x),
+            std::uint16_t(it->y),
             state
         };
         tuples.emplace_back(p);
       }
     }
 
-    fmt::print("Displaying Edges: {}, Distance: {}\n", contours.size(), accumulator);
-    cv::Mat drawing = cv::Mat::zeros(detected_edges.size(), CV_8UC3);
+    /*cv::Mat drawing = cv::Mat::zeros(detected_edges.size(), CV_8UC3);
     for (size_t i = 0; i < contours.size(); i++) {
       drawContours(drawing, contours, int(i), cv::Scalar(255, 255, 255), 1, cv::LINE_8, hierarchy, 0);
     }
+
+    cv::imshow("Contour", drawing);
+    cv::waitKey(0);
+    return 0*/;
   }
 
   libusb_check_error(libusb_init(nullptr), __func__);
@@ -218,19 +229,19 @@ int main(int argc, char* argv[]) {
   libusb_cdc_init_line_state(device_handle);
   libusb_cdc_init_line_encoding(device_handle);
 
-  std::vector<unsigned char> out_data(64);
+  std::vector<unsigned char> out_data(8);
   std::vector<unsigned char> in_data(1024);
 
   auto it = tuples.begin();
   while (true) {
-    out_data.resize(64);
+    out_data.resize(8);
     in_data.resize(1024);
 
-    out_data[0] = static_cast<unsigned char>(it->x);
-    out_data[1] = static_cast<unsigned char>(it->y);
-    out_data[2] = static_cast<unsigned char>(it->state);
-
-    out_data.resize(4);
+    out_data[0] = static_cast<unsigned char>((it->x >> 8) & 0xFF);
+    out_data[1] = static_cast<unsigned char>((it->x >> 0) & 0xFF);
+    out_data[2] = static_cast<unsigned char>((it->y >> 8) & 0xFF);
+    out_data[3] = static_cast<unsigned char>((it->y >> 0) & 0xFF);
+    out_data[4] = static_cast<unsigned char>(it->state);
 
     libusb_write(device_handle, out_data);
     libusb_read(device_handle, in_data);

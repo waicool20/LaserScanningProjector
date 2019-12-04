@@ -7,8 +7,8 @@
 class laser_canvas {
  public:
   struct tuple {
-    std::uint8_t x;
-    std::uint8_t y;
+    std::uint16_t x;
+    std::uint16_t y;
     bool state;
   };
 

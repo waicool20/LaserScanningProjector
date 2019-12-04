@@ -52,15 +52,18 @@ void cdcacm_data_rx_cb(usbd_device* usbd_dev, uint8_t ep) {
 
   if (len) {
     char send;
-    if (len > 4) {
+    if (len > 8) {
       send = 2;
     } else if (instance.tuple_present()) {
       send = 1;
     } else {
+      const std::uint16_t x = (static_cast<std::uint8_t>(buf[0]) << 8) + (static_cast<std::uint8_t>(buf[1]));
+      const std::uint16_t y = (static_cast<std::uint8_t>(buf[2]) << 8) + (static_cast<std::uint8_t>(buf[3]));
+
       laser_canvas::tuple tuple = {
-          static_cast<std::uint8_t>(buf[0]),
-          static_cast<std::uint8_t>(buf[1]),
-          static_cast<bool>(buf[2])
+          x,
+          y,
+          static_cast<bool>(buf[4])
       };
       instance.tuple_push(tuple);
 
