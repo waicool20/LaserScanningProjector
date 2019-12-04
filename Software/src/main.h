@@ -8,7 +8,8 @@ enum struct render {
   DEBUG_HOME_LASER,
   INIT_HOME_LASER,
   AUDIO_MIC,
-  USB
+  USB,
+  DEBUG_MANUAL
 };
 
 extern render rendering;

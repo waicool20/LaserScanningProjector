@@ -130,7 +130,7 @@ int main(int argc, char* argv[]) {
     std::pair<std::size_t, std::size_t> bounds = {lowThreshold, max_lowThreshold};
     double accumulator = 0.0;
     while (true) {
-      const auto threshold = (bounds.first + bounds.second) / 2;
+      const auto threshold = double(bounds.first + bounds.second) / 2;
       contours.clear();
       hierarchy.clear();
 
@@ -140,7 +140,7 @@ int main(int argc, char* argv[]) {
 
       if (std::fabs(bounds.second - bounds.first) <= 1.0f) {
         break;
-      } else if (bounds.second == lowThreshold || bounds.first == max_lowThreshold) {
+      } else if (threshold == lowThreshold || threshold + 1 == max_lowThreshold) {
         break;
       }
 
@@ -156,9 +156,11 @@ int main(int argc, char* argv[]) {
       });
       accumulator = std::accumulate(distances.begin(), distances.end(), 0.0);
       if (accumulator < dist_thresh) {
-        bounds.second = (bounds.first + bounds.second) / 2;
+        bounds.second = double(bounds.first + bounds.second) / 2;
       } else if (accumulator > dist_thresh) {
-        bounds.first = (bounds.first + bounds.second) / 2;
+        bounds.first = double(bounds.first + bounds.second) / 2;
+      } else {
+        break;
       }
 
       // NumContour-based Limit

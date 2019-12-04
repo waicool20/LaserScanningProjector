@@ -13,6 +13,7 @@ class view_debug {
     static lvgl::list& list();
     static lvgl::group& input_group();
     static void home_laser_btn_cb(lv_obj_t *obj, lv_event_t event);
+    static void manual_btn_cb(lv_obj_t *obj, lv_event_t event);
     static void back_btn_cb(lv_obj_t *obj, lv_event_t event);
 };
 

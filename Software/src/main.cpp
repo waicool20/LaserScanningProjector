@@ -104,6 +104,18 @@ int main() {
           laser.disable();
         }
         break;
+      case render::DEBUG_MANUAL:
+        laser.enable();
+        if (nav5.read_left()) {
+          canvas.goto_xy(canvas.get_current_x() - 1, canvas.get_current_y(), false);
+        } else if (nav5.read_right()) {
+          canvas.goto_xy(canvas.get_current_x() + 1, canvas.get_current_y(), false);
+        } else if (nav5.read_up()) {
+          canvas.goto_xy(canvas.get_current_x(), canvas.get_current_y() - 1, false);
+        } else if (nav5.read_down()) {
+          canvas.goto_xy(canvas.get_current_x(), canvas.get_current_y() + 1, false);
+        }
+        break;
       case render::NONE:
       default:
         mic.disable();

@@ -70,7 +70,8 @@ add_executable(${PROJECT_NAME}.elf
         src/views/view_basic.cpp
         src/views/view_audio.cpp
         src/views/view_usb.cpp
-        src/views/view_debug.cpp)
+        src/views/view_debug.cpp
+        src/views/view_manual.cpp)
 
 add_dependencies(${PROJECT_NAME}.elf libopencm3-genlink)
 target_compile_options(${PROJECT_NAME}.elf PRIVATE
