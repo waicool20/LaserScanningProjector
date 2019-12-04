@@ -59,8 +59,8 @@ void laser_canvas::goto_xy(std::uint32_t x, std::uint32_t y, bool no_delay = fal
 
   static auto max_dist = std::sqrt(float(_width * _width + _height * _height));
 
-  const auto dx = std::int32_t(x - current_x);
-  const auto dy = std::int32_t(y - current_y);
+  const auto dx = std::int32_t(x) - std::int32_t(current_x);
+  const auto dy = std::int32_t(y) - std::int32_t(current_y);
   _x_motor.set_dir(dx > 0 ? stepper_motor::cw : stepper_motor::ccw);
   _y_motor.set_dir(dy > 0 ? stepper_motor::ccw : stepper_motor::cw);
 
@@ -185,9 +185,9 @@ void laser_canvas::draw_magnitude_y(float magnitude) {
 
 void laser_canvas::resize(uint32_t w, uint32_t h) {
   if (_width == w && _height == h) return;
-  current_x += (w - _width) / 2; // Remap width
+  current_x += (int32_t(w) - int32_t(_width)) / 2; // Remap width
   _width = w;
-  current_y += (h - _height) / 2; // Remap height
+  current_y += (int32_t(h) - int32_t(_height)) / 2; // Remap height
   _height = h;
 }
 

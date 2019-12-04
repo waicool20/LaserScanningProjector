@@ -1,6 +1,7 @@
 #include "main.h"
 #include "view_usb.h"
 #include "lib/ui.h"
+#include "lib/usb_cdcacm.h"
 #include "view_main.h"
 
 using namespace std::literals;
@@ -44,6 +45,9 @@ void view_usb::back_btn_cb(lv_obj_t * obj, lv_event_t event) {
     case LV_EVENT_PRESSED:
       show(false);
       view_main::show(true);
+      if (usb_cdcacm::instance().tuple_present()) {
+        usb_cdcacm::instance().tuple_pop();
+      }
       rendering = render::NONE;
       break;
   }
