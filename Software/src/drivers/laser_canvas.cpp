@@ -90,7 +90,7 @@ void laser_canvas::goto_xy(std::uint32_t x, std::uint32_t y, bool no_delay = fal
 
   if (!no_delay) {
     const auto dist = std::sqrt(float(dx * dx + dy * dy));
-    systick::sleep(6ms + (2ms * dist / max_dist));
+    systick::sleep(5ms + (3ms * dist / max_dist));
   }
 }
 

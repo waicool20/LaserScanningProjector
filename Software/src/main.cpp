@@ -59,6 +59,8 @@ int main() {
       gpio(GPIOB, GPIO9)
   };
 
+  std::uint64_t last_usb_cmd_issue = 0;
+
   ui::init(&lcd, &nav5);
   view_init::show(true);
 
@@ -93,9 +95,13 @@ int main() {
         canvas.draw_magnitude_y(mic.get_latest_value());
         break;
       case render::USB:
+        canvas.resize(320, 240);
         if (usb_cdcacm::instance().tuple_present()) {
+          last_usb_cmd_issue = systick::ms();
           const auto t = usb_cdcacm::instance().tuple_pop();
           canvas.draw_tuples(&t, 1);
+        } else if (last_usb_cmd_issue - systick::ms() > 1000) {
+          laser.disable();
         }
         break;
       case render::NONE:
