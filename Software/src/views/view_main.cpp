@@ -1,4 +1,4 @@
-#include <main.h>
+#include "main.h"
 #include "view_main.h"
 #include "view_basic.h"
 #include "lib/ui.h"
@@ -8,6 +8,7 @@
 #include "lib/lvgl/list.h"
 #include "view_audio.h"
 #include "view_debug.h"
+#include "view_usb.h"
 
 using namespace std::literals;
 
@@ -78,7 +79,11 @@ void view_main::debug_btn_cb(lv_obj_t* obj, lv_event_t event) {
 }
 
 void view_main::usb_btn_cb(lv_obj_t* obj, lv_event_t event) {
-  if (event == LV_EVENT_PRESSED) {
-    rendering = render::USB;
+  switch(event) {
+    case LV_EVENT_PRESSED:
+      show(false);
+      view_usb::show(true);
+      rendering = render::USB;
+      break;
   }
 }
