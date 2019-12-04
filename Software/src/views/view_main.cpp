@@ -1,3 +1,4 @@
+#include <main.h>
 #include "view_main.h"
 #include "view_basic.h"
 #include "lib/ui.h"
@@ -18,13 +19,14 @@ void view_main::init() {
   list().hidden(true);
   list().size(list().screen().w(), list().screen().h());
   auto basic_btn = list().add_btn("Basic"sv);
-  list().add_btn("USB"sv);
+  auto usb_btn = list().add_btn("USB"sv);
   auto audio_btn = list().add_btn("Audio"sv);
   auto debug_btn = list().add_btn("Debug"sv);
 
   basic_btn.add_event_callback(basic_btn_cb);
   audio_btn.add_event_callback(audio_btn_cb);
   debug_btn.add_event_callback(debug_btn_cb);
+  usb_btn.add_event_callback(usb_btn_cb);
   created = true;
 }
 
@@ -72,5 +74,11 @@ void view_main::debug_btn_cb(lv_obj_t* obj, lv_event_t event) {
       show(false);
       view_debug::show(true);
       break;
+  }
+}
+
+void view_main::usb_btn_cb(lv_obj_t* obj, lv_event_t event) {
+  if (event == LV_EVENT_PRESSED) {
+    rendering = render::USB;
   }
 }

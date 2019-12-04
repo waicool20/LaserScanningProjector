@@ -15,6 +15,7 @@ class view_main {
     static void basic_btn_cb(lv_obj_t * obj, lv_event_t event);
     static void debug_btn_cb(lv_obj_t *obj, lv_event_t event);
     static void audio_btn_cb(lv_obj_t *obj, lv_event_t event);
+    static void usb_btn_cb(lv_obj_t* obj, lv_event_t event);
 };
 
 

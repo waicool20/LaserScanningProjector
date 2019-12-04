@@ -54,6 +54,8 @@ int main() {
       gpio(GPIOB, GPIO9)
   };
 
+  [[maybe_unused]] usb_cdcacm::instance();
+
   ui::init(&lcd, &nav5);
   view_init::show(true);
 
@@ -82,6 +84,12 @@ int main() {
       case render::AUDIO_MIC:
         mic.enable();
         canvas.draw_magnitude_y(mic.get_latest_value());
+        break;
+      case render::USB:
+        if (usb_cdcacm::instance().tuple_present()) {
+          const auto t = usb_cdcacm::instance().tuple_pop();
+          canvas.draw_tuples(&t, 1);
+        }
         break;
       case render::NONE:
       default:

@@ -46,18 +46,25 @@ usbd_request_return_codes cdcacm_control_request(usbd_device* usbd_dev,
 void cdcacm_data_rx_cb(usbd_device* usbd_dev, uint8_t ep) {
   (void) ep;
 
-  static std::uint64_t last_recv_packet = 0;
-
+  usb_cdcacm& instance = usb_cdcacm::instance();
   std::array<char, 64> buf = {};
   std::uint16_t len = usbd_ep_read_packet(usbd_dev, 0x01, buf.data(), buf.size());
 
   if (len) {
     char send;
-    if (last_recv_packet < systick::ms()) {
-      last_recv_packet = systick::ms();
-      send = 0;
-    } else {
+    if (len > 4) {
+      send = 2;
+    } else if (instance.tuple_present()) {
       send = 1;
+    } else {
+      laser_canvas::tuple tuple = {
+          static_cast<std::uint8_t>(buf[0]),
+          static_cast<std::uint8_t>(buf[1]),
+          static_cast<bool>(buf[2])
+      };
+      instance.tuple_push(tuple);
+
+      send = 0;
     }
 
     usbd_ep_write_packet(usbd_dev, 0x82, &send, 1);
@@ -98,22 +105,7 @@ usb_cdcacm::usb_cdcacm() :
                         _buffer.size());
   usbd_register_set_config_callback(_usbd_dev, &cdcacm_set_config);
 
-  rcc::periph_clock_enable(RCC_TIM7);
-  nvic_enable_irq(NVIC_TIM7_IRQ);
-  // Set lower priority
-  nvic_set_priority(NVIC_TIM7_IRQ, 5);
-  rcc::periph_reset_pulse(RST_TIM7);
 
-  timer_set_mode(TIM7, TIM_CR1_CKD_CK_INT,
-                 TIM_CR1_CMS_EDGE, TIM_CR1_DIR_UP);
-  timer_set_prescaler(TIM7, 72000);
-  timer_disable_preload(TIM7);
-  timer_continuous_mode(TIM7);
-  timer_set_period(TIM7, 1);
-  timer_update_on_overflow(TIM7);
-  timer_enable_update_event(TIM7);
-  timer_enable_counter(TIM7);
-  timer_enable_irq(TIM7, TIM_DIER_UIE);
 }
 
 void usb_cdcacm::periph_setup() {
@@ -130,8 +122,43 @@ void usb_cdcacm::poll() {
   usbd_poll(_usbd_dev);
 }
 
+bool usb_cdcacm::tuple_present() const {
+  return _tuple_.has_value();
+}
+
+void usb_cdcacm::tuple_push(laser_canvas::tuple tuple) {
+  _tuple_ = std::make_optional(tuple);
+}
+
+laser_canvas::tuple usb_cdcacm::tuple_pop() {
+  auto tuple = _tuple_.value();
+  _tuple_.reset();
+  return tuple;
+}
+
 usb_cdcacm& usb_cdcacm::instance() {
   static usb_cdcacm usb;
+
+  if (!usb._timer_en_) {
+    rcc::periph_clock_enable(RCC_TIM7);
+    nvic_enable_irq(NVIC_TIM7_IRQ);
+    // Set lower priority
+    nvic_set_priority(NVIC_TIM7_IRQ, 5);
+    rcc::periph_reset_pulse(RST_TIM7);
+
+    timer_set_mode(TIM7, TIM_CR1_CKD_CK_INT,
+                   TIM_CR1_CMS_EDGE, TIM_CR1_DIR_UP);
+    timer_set_prescaler(TIM7, 72000);
+    timer_disable_preload(TIM7);
+    timer_continuous_mode(TIM7);
+    timer_set_period(TIM7, 1);
+    timer_update_on_overflow(TIM7);
+    timer_enable_update_event(TIM7);
+    timer_enable_counter(TIM7);
+    timer_enable_irq(TIM7, TIM_DIER_UIE);
+
+    usb._timer_en_ = true;
+  }
 
   return usb;
 }
