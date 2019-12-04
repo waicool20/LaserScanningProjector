@@ -48,6 +48,8 @@ class laser_canvas {
   [[nodiscard]] std::uint32_t get_current_y() const;
   [[nodiscard]] std::uint32_t get_width() const;
   [[nodiscard]] std::uint32_t get_height() const;
+
+  [[nodiscard]] void resize(uint32_t w, uint32_t h);
  private:
   [[nodiscard]] std::pair<std::size_t, std::uint8_t> index_conversion(std::uint32_t x, std::uint32_t y) const;
 

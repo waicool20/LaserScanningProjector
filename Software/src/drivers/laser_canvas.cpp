@@ -98,15 +98,23 @@ void laser_canvas::highlight_canvas_area() {
   _laser.disable();
   goto_xy(0, 0);
   _laser.enable();
+  systick::sleep(10ms);
   goto_xy(0, _height - 1);
+  systick::sleep(10ms);
   goto_xy(_width - 1, _height - 1);
+  systick::sleep(10ms);
   goto_xy(_width - 1, 0);
+  systick::sleep(10ms);
   goto_xy(0, 0);
+  systick::sleep(10ms);
   goto_xy(_width - 1, _height - 1);
+  systick::sleep(10ms);
   _laser.disable();
   goto_xy(_width - 1, 0);
   _laser.enable();
+  systick::sleep(10ms);
   goto_xy(0, _height - 1);
+  systick::sleep(10ms);
 }
 
 std::pair<std::size_t, std::uint8_t> laser_canvas::index_conversion(std::uint32_t x, std::uint32_t y) const {
@@ -166,14 +174,21 @@ void laser_canvas::draw_tuples(const tuple* tuples, std::size_t size) {
 
 void laser_canvas::draw_magnitude_y(float magnitude) {
   _laser.enable();
-  uint32_t new_x = current_x + 5;
+  uint32_t new_x = current_x + _width / 64;
   if (new_x >= _width) {
     _laser.disable();
     new_x = 0;
   }
   goto_xy(new_x, roundf((_height / 2) + magnitude * (_height / 2)), true);
   if (new_x == 0) { _laser.enable(); }
-  systick::sleep(10us);
+}
+
+void laser_canvas::resize(uint32_t w, uint32_t h) {
+  if (_width == w && _height == h) return;
+  current_x += (w - _width) / 2; // Remap width
+  _width = w;
+  current_y += (h - _height) / 2; // Remap height
+  _height = h;
 }
 
 std::uint32_t laser_canvas::get_width() const {
