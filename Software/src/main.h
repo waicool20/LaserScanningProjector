@@ -9,7 +9,9 @@ enum struct render {
   INIT_HOME_LASER,
   AUDIO_MIC,
   USB,
-  DEBUG_MANUAL
+  DEBUG_MANUAL,
+  AUDIO_HEADPHONES,
+  AUDIO_HEADPHONES_XY
 };
 
 extern render rendering;

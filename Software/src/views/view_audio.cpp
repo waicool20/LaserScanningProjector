@@ -12,9 +12,13 @@ void view_audio::init() {
   input_group().add(list());
   list().hidden(true);
   list().size(list().screen().w(), list().screen().h());
+  auto headphones_btn = list().add_btn("Headphones"sv);
+  auto headphones_xy_btn = list().add_btn("Headphones XY"sv);
   auto mic_btn = list().add_btn("Microphone"sv);
   auto back_btn = list().add_btn("Back"sv);
 
+  headphones_btn.add_event_callback(headphones_btn_cb);
+  headphones_xy_btn.add_event_callback(headphones_xy_btn_cb);
   mic_btn.add_event_callback(mic_btn_cb);
   back_btn.add_event_callback(back_btn_cb);
 
@@ -39,6 +43,22 @@ lvgl::list &view_audio::list() {
 lvgl::group &view_audio::input_group() {
   static lvgl::group _group;
   return _group;
+}
+
+void view_audio::headphones_btn_cb(lv_obj_t * obj, lv_event_t event) {
+  switch(event) {
+    case LV_EVENT_PRESSED:
+      rendering = render::AUDIO_HEADPHONES;
+      break;
+  }
+}
+
+void view_audio::headphones_xy_btn_cb(lv_obj_t * obj, lv_event_t event) {
+  switch(event) {
+    case LV_EVENT_PRESSED:
+      rendering = render::AUDIO_HEADPHONES_XY;
+      break;
+  }
 }
 
 void view_audio::mic_btn_cb(lv_obj_t * obj, lv_event_t event) {
