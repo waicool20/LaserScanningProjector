@@ -183,6 +183,14 @@ void laser_canvas::draw_magnitude_y(float magnitude) {
   if (new_x == 0) { _laser.enable(); }
 }
 
+void laser_canvas::draw_magnitude_xy(float magnitude_x, float magnitude_y) {
+  _laser.enable();
+  goto_xy(
+      roundf((_width / 2) + magnitude_x * (_width / 2)),
+      roundf((_height / 2) + magnitude_y * (_height / 2)),
+      true);
+}
+
 void laser_canvas::resize(uint32_t w, uint32_t h) {
   if (_width == w && _height == h) return;
   current_x += (int32_t(w) - int32_t(_width)) / 2; // Remap width

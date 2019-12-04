@@ -49,6 +49,7 @@ add_executable(${PROJECT_NAME}.elf
         src/drivers/stepper_motor.cpp
         src/drivers/st7735s.cpp
         src/drivers/mic.cpp
+        src/drivers/headphones.cpp
 
         src/lib/circular_queue.h
         src/lib/gpio.cpp

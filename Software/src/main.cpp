@@ -16,6 +16,7 @@
 #include "views/view_init.h"
 #include "views/view_main.h"
 #include "drivers/mic.h"
+#include "drivers/headphones.h"
 #include "images/smiley.h"
 
 using namespace std::literals;
@@ -65,6 +66,7 @@ int main() {
   view_init::show(true);
 
   mic mic{};
+  headphones headphones{};
   while (true) {
     switch (rendering) {
       case render::BASIC_RECT:
@@ -94,6 +96,16 @@ int main() {
         canvas.resize(512, 512);
         canvas.draw_magnitude_y(mic.get_latest_value());
         break;
+      case render::AUDIO_HEADPHONES:
+        headphones.enable();
+        canvas.resize(512, 512);
+        canvas.draw_magnitude_y(headphones.channel_average());
+        break;
+      case render::AUDIO_HEADPHONES_XY:
+        headphones.enable();
+        canvas.resize(512, 512);
+        canvas.draw_magnitude_xy(headphones.channel_x(), headphones.channel_y());
+        break;
       case render::USB:
         canvas.resize(320, 240);
         if (usb_cdcacm::instance().tuple_present()) {
@@ -119,6 +131,7 @@ int main() {
       case render::NONE:
       default:
         mic.disable();
+        headphones.disable();
         canvas.clear();
         break;
     }

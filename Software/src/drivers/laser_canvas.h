@@ -39,6 +39,7 @@ class laser_canvas {
 
   void goto_xy(std::uint32_t x, std::uint32_t y, bool no_delay);
   void draw_magnitude_y(float magnitude);
+  void draw_magnitude_xy(float magnitude_x, float magnitude_y);
   void draw_frame(const std::uint8_t* frame_data);
   void draw_tuples(const tuple* tuples, std::size_t size);
   void highlight_canvas_area();
