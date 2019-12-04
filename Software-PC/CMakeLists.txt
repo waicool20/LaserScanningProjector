@@ -4,6 +4,7 @@ project(LaserScanningProject-PC CXX)
 set(CMAKE_CXX_STANDARD 17)
 
 find_package(fmt REQUIRED)
+find_package(OpenCV REQUIRED)
 
 find_path(LIBUSB_INCLUDE_DIR NAMES libusb.h PATHS /usr/include/libusb-1.0/)
 find_library(LIBUSB_LIBRARY NAMES usb-1.0)
@@ -16,4 +17,6 @@ target_include_directories(${PROJECT_NAME} PRIVATE
         ${FMT_INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME} PRIVATE
         ${LIBUSB_LIBRARY}
-        fmt::fmt)
+        fmt::fmt
+        ${OpenCV_LIBS}
+        opencv_imgcodecs)

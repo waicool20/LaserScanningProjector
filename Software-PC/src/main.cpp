@@ -1,16 +1,21 @@
 #include <array>
+#include <numeric>
 #include <string_view>
 #include <thread>
 #include <vector>
 
 #include <fmt/format.h>
 #include <libusb-1.0/libusb.h>
+#include <opencv2/opencv.hpp>
 
 using namespace std::literals;
 
 namespace {
 constexpr std::uint16_t vid = 0x0483;
 constexpr std::uint16_t pid = 0x5740;
+
+constexpr auto w = 320;
+constexpr auto h = 240;
 
 void libusb_check_error(int rc, const char* func_name) {
   if (rc < 0) {
@@ -78,7 +83,121 @@ constexpr std::array<packet, 4> tuples = {{
 
 }  // namespace
 
-int main() {
+void resize_keep_ratio(cv::Mat& src, cv::Mat& dest, const cv::Size& target) {
+  const auto y_scale = double(target.height) / src.rows;
+  const auto x_scale = double(target.width) / src.cols;
+
+  const auto scale = std::min(x_scale, y_scale);
+  cv::resize(src, dest, cv::Size(src.cols * scale, src.rows * scale), scale, scale);
+
+  // Padding-related stuff
+  /*const auto x_padding = (target.width - src.cols) / 2;
+  const auto y_padding = (target.height - src.rows) / 2;
+
+  cv::copyMakeBorder(dest, dest, y_padding, y_padding, x_padding, x_padding, cv::BORDER_CONSTANT, cv::Scalar(255));
+
+  cv::Mat padded;
+  padded.create(src.rows + y_padding * 2, src.cols + x_padding * 2, src.type());
+  padded.setTo(cv::Scalar::all(0));
+  src.copyTo(padded(cv::Rect(x_padding, y_padding, src.cols, src.rows)));
+  padded.copyTo(src);*/
+}
+
+int main(int argc, char* argv[]) {
+  std::vector tuples(::tuples.begin(), ::tuples.end());
+  if (argc == 2) {
+    tuples.clear();
+    cv::Mat src = cv::imread(argv[1], cv::IMREAD_COLOR);
+    if (src.empty()) {
+      fmt::print("Could not open or find the image!\n");
+      fmt::print("Usage: {} <Input image>\n", argv[0]);
+      return -1;
+    }
+
+    resize_keep_ratio(src, src, cv::Size(w, h));
+
+    cv::Mat src_gray;
+    cvtColor(src, src_gray, cv::COLOR_BGR2GRAY);
+
+    constexpr auto dist_thresh = 200;
+    constexpr auto lines_thresh = 200;
+    constexpr auto lowThreshold = 0;
+    constexpr auto max_lowThreshold = 100;
+
+    cv::Mat detected_edges;
+    std::vector<std::vector<cv::Point>> contours;
+    std::vector<cv::Vec4i> hierarchy;
+    std::pair<std::size_t, std::size_t> bounds = {lowThreshold, max_lowThreshold};
+    double accumulator = 0.0;
+    while (true) {
+      const auto threshold = (bounds.first + bounds.second) / 2;
+      contours.clear();
+      hierarchy.clear();
+
+      blur(src_gray, detected_edges, cv::Size(3, 3));
+      Canny(detected_edges, detected_edges, threshold, threshold * 3, 3);
+      findContours(detected_edges, contours, hierarchy, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);
+
+      if (std::fabs(bounds.second - bounds.first) <= 1.0f) {
+        break;
+      } else if (bounds.second == lowThreshold || bounds.first == max_lowThreshold) {
+        break;
+      }
+
+      if (contours.size() > lines_thresh) {
+        bounds.first = (bounds.first + bounds.second) / 2;
+      }
+
+      std::vector<double> distances(contours.size());
+      std::transform(contours.begin(), contours.end(), distances.begin(), [](const std::vector<cv::Point>& vp) {
+        const double x = vp.back().x - vp.front().x;
+        const double y = vp.back().y - vp.back().y;
+        return std::sqrt(x * x + y * y);
+      });
+      accumulator = std::accumulate(distances.begin(), distances.end(), 0.0);
+      if (accumulator < dist_thresh) {
+        bounds.second = (bounds.first + bounds.second) / 2;
+      } else if (accumulator > dist_thresh) {
+        bounds.first = (bounds.first + bounds.second) / 2;
+      }
+
+      // NumContour-based Limit
+      /*if (contours.size() == lines_thresh) {
+        break;
+      } else if (std::fabs(bounds.second - bounds.first) <= 1.0f) {
+        break;
+      } else if (bounds.second == lowThreshold || bounds.first == max_lowThreshold) {
+        break;
+      }
+
+      if (contours.size() < lines_thresh) {
+        bounds.second = (bounds.first + bounds.second) / 2;
+      } else if (contours.size() > lines_thresh) {
+        bounds.first = (bounds.first + bounds.second) / 2;
+      }*/
+    }
+
+    for (const auto& line : contours) {
+      const auto last = --line.end();
+
+      for (auto it = line.begin(); it != line.end(); ++it) {
+        const bool state = it != last;
+        const packet p = {
+            std::uint8_t(it->x),
+            std::uint8_t(it->y),
+            state
+        };
+        tuples.emplace_back(p);
+      }
+    }
+
+    fmt::print("Displaying Edges: {}, Distance: {}\n", contours.size(), accumulator);
+    cv::Mat drawing = cv::Mat::zeros(detected_edges.size(), CV_8UC3);
+    for (size_t i = 0; i < contours.size(); i++) {
+      drawContours(drawing, contours, int(i), cv::Scalar(255, 255, 255), 1, cv::LINE_8, hierarchy, 0);
+    }
+  }
+
   libusb_check_error(libusb_init(nullptr), __func__);
 
   libusb_set_option(nullptr, LIBUSB_OPTION_LOG_LEVEL, 3);
@@ -124,5 +243,7 @@ int main() {
         it = tuples.begin();
       }
     }
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(1));
   }
 }
