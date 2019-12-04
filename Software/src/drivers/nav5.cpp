@@ -1,6 +1,6 @@
 #include "nav5.h"
 
-nav5::nav5(const gpio &up, const gpio &down, const gpio &left, const gpio &right, const gpio &center) :
+nav5::nav5(const gpio& up, const gpio& down, const gpio& left, const gpio& right, const gpio& center) :
     _up(up), _down(down), _left(left), _right(right), _center(center) {
   _up.setup(GPIO_MODE_INPUT, GPIO_PUPD_PULLDOWN);
   _down.setup(GPIO_MODE_INPUT, GPIO_PUPD_PULLDOWN);

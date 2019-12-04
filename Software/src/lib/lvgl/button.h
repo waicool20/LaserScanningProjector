@@ -4,6 +4,9 @@
 
 namespace lvgl {
 
+/**
+ * \brief Abstraction for LVGL button.
+ */
 class button : public object {
  public:
   explicit button(object& parent, const button* copy = nullptr);

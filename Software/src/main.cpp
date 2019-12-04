@@ -49,7 +49,7 @@ int main() {
   stepper_motor xM{gpio(GPIOB, GPIO7), gpio(GPIOB, GPIO6), gpio(GPIOB, GPIO5)};
   stepper_motor yM{gpio(GPIOB, GPIO4), gpio(GPIOB, GPIO3), gpio(GPIOA, GPIO15)};
   gpio ldr = gpio(GPIOB, GPIO0);
-  laser_canvas canvas{25600, default_w,  default_h, laser, xM, yM, ldr};
+  laser_canvas canvas{25600, default_w, default_h, laser, xM, yM, ldr};
 
   st7735s lcd{0, 0, 128, 160, st7735s::COLOR_MODE_18_BITS};
   nav5 nav5{
@@ -70,15 +70,15 @@ int main() {
   while (true) {
     switch (rendering) {
       case render::BASIC_RECT:
-        canvas.resize(default_w,  default_h);
+        canvas.resize(default_w, default_h);
         canvas.highlight_canvas_area();
         break;
       case render::BASIC_BITMAP:
-        canvas.resize(default_w,  default_h);
+        canvas.resize(default_w, default_h);
         canvas.draw_frame(&smiley_map[0]);
         break;
       case render::BASIC_TUPLE:
-        canvas.resize(default_w,  default_h);
+        canvas.resize(default_w, default_h);
         canvas.draw_tuples(tuples.data(), tuples.size());
         break;
       case render::DEBUG_HOME_LASER:

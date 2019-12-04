@@ -2,8 +2,8 @@
 #include "mic.h"
 #include "lib/systick.h"
 
-uint32_t mic::_adc  = ADC3;
-uint8_t  mic::_adc_channels[1] = { 1 };
+uint32_t mic::_adc = ADC3;
+uint8_t  mic::_adc_channels[1] = {1};
 gpio mic::_mic = gpio{GPIOB, GPIO1};
 
 volatile uint32_t mic::latest_value = 0;
@@ -37,11 +37,11 @@ mic::mic() {
 }
 
 float mic::get_latest_value() {
-  return (latest_value / float(4096) - 0.5) * 2;
+  return (latest_value / 4096.0f - 0.5f) * 2;
 }
 
 void mic::enable() {
-  if (enabled) return;
+  if (enabled) { return; }
   adc_power_on(_adc);
   systick::sleep_ms(5);
   adc_start_conversion_regular(_adc);
@@ -49,7 +49,7 @@ void mic::enable() {
 }
 
 void mic::disable() {
-  if (!enabled) return;
+  if (!enabled) { return; }
   adc_power_off(_adc);
   enabled = false;
 }

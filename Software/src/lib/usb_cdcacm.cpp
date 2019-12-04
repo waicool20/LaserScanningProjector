@@ -108,7 +108,6 @@ usb_cdcacm::usb_cdcacm() :
                         _buffer.size());
   usbd_register_set_config_callback(_usbd_dev, &cdcacm_set_config);
 
-
 }
 
 void usb_cdcacm::periph_setup() {

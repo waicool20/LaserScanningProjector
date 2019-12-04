@@ -9,7 +9,7 @@ using namespace std::literals;
 bool view_usb::created = false;
 
 void view_usb::init() {
-  if (created) return;
+  if (created) { return; }
   input_group().add(list());
   list().hidden(true);
   list().size(list().screen().w(), list().screen().h());
@@ -30,26 +30,24 @@ void view_usb::show(bool show) {
   }
 }
 
-lvgl::list &view_usb::list() {
+lvgl::list& view_usb::list() {
   static lvgl::list _list;
   return _list;
 }
 
-lvgl::group &view_usb::input_group() {
+lvgl::group& view_usb::input_group() {
   static lvgl::group _group;
   return _group;
 }
 
-void view_usb::back_btn_cb(lv_obj_t * obj, lv_event_t event) {
-  switch(event) {
-    case LV_EVENT_PRESSED:
-      show(false);
-      view_main::show(true);
-      if (usb_cdcacm::instance().tuple_present()) {
-        usb_cdcacm::instance().tuple_pop();
-      }
-      rendering = render::NONE;
-      break;
+void view_usb::back_btn_cb(lv_obj_t* obj, lv_event_t event) {
+  if (event == LV_EVENT_PRESSED) {
+    show(false);
+    view_main::show(true);
+    if (usb_cdcacm::instance().tuple_present()) {
+      usb_cdcacm::instance().tuple_pop();
+    }
+    rendering = render::NONE;
   }
 }
 

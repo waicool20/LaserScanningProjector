@@ -7,6 +7,9 @@
 
 namespace lvgl {
 
+/**
+ * \brief Abstraction for LVGL container.
+ */
 class container : public object {
  public:
   explicit container(lv_obj_t* parent = lv_scr_act(), const container* copy = nullptr);

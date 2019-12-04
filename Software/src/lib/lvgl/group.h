@@ -6,6 +6,9 @@
 
 namespace lvgl {
 
+/**
+ * \brief Abstraction for LVGL group.
+ */
 class group {
  public:
   group() = default;

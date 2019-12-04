@@ -15,7 +15,7 @@ using namespace std::literals;
 bool view_main::created = false;
 
 void view_main::init() {
-  if (created) return;
+  if (created) { return; }
   input_group().add(list());
   list().hidden(true);
   list().size(list().screen().w(), list().screen().h());
@@ -41,49 +41,41 @@ void view_main::show(bool show) {
   }
 }
 
-lvgl::list &view_main::list() {
+lvgl::list& view_main::list() {
   static lvgl::list _list;
   return _list;
 }
 
-lvgl::group &view_main::input_group() {
+lvgl::group& view_main::input_group() {
   static lvgl::group _group;
   return _group;
 }
 
-void view_main::basic_btn_cb(lv_obj_t * obj, lv_event_t event) {
-  switch(event) {
-    case LV_EVENT_PRESSED:
-      show(false);
-      view_basic::show(true);
-      break;
+void view_main::basic_btn_cb(lv_obj_t* obj, lv_event_t event) {
+  if (event == LV_EVENT_PRESSED) {
+    show(false);
+    view_basic::show(true);
   }
 }
 
 void view_main::audio_btn_cb(lv_obj_t* obj, lv_event_t event) {
-  switch(event) {
-    case LV_EVENT_PRESSED:
-      show(false);
-      view_audio::show(true);
-      break;
+  if (event == LV_EVENT_PRESSED) {
+    show(false);
+    view_audio::show(true);
   }
 }
 
 void view_main::debug_btn_cb(lv_obj_t* obj, lv_event_t event) {
-  switch(event) {
-    case LV_EVENT_PRESSED:
-      show(false);
-      view_debug::show(true);
-      break;
+  if (event == LV_EVENT_PRESSED) {
+    show(false);
+    view_debug::show(true);
   }
 }
 
 void view_main::usb_btn_cb(lv_obj_t* obj, lv_event_t event) {
-  switch(event) {
-    case LV_EVENT_PRESSED:
-      show(false);
-      view_usb::show(true);
-      rendering = render::USB;
-      break;
+  if (event == LV_EVENT_PRESSED) {
+    show(false);
+    view_usb::show(true);
+    rendering = render::USB;
   }
 }

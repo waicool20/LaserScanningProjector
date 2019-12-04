@@ -6,6 +6,9 @@
 
 namespace lvgl {
 
+/**
+ * \brief Abstraction for LVGL label.
+ */
 class label : public object {
  public:
   explicit label(object& parent, const label* copy = nullptr);

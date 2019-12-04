@@ -201,7 +201,11 @@ class st7735s {
    * \param fg_rgb foreground (character) color
    * \param bg_rgb background color
    */
-  void draw_string(std::uint8_t x, std::uint8_t y, std::string_view sv, std::uint32_t fg_rgb = 0xFFFFFF, std::uint32_t bg_rgb = 0x000000);
+  void draw_string(std::uint8_t x,
+                   std::uint8_t y,
+                   std::string_view sv,
+                   std::uint32_t fg_rgb = 0xFFFFFF,
+                   std::uint32_t bg_rgb = 0x000000);
 
   /**
    * Draws a pixel on screen

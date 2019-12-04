@@ -9,7 +9,7 @@ using namespace std::literals;
 bool view_init::created = false;
 
 void view_init::init() {
-  if (created) return;
+  if (created) { return; }
 
   container().hidden(true);
   container().fit(LV_FIT_FLOOD);
@@ -56,18 +56,18 @@ void view_init::show(bool show) {
   }
 }
 
-lvgl::container &view_init::container() {
+lvgl::container& view_init::container() {
   static lvgl::container _container;
   return _container;
 }
 
-lvgl::label &view_init::wait_label() {
+lvgl::label& view_init::wait_label() {
   auto scr = lvgl::active_screen();
   static lvgl::label _label(scr);
   return _label;
 }
 
-void view_init::start_btn_cb(lv_obj_t *obj, lv_event_t event) {
+void view_init::start_btn_cb(lv_obj_t* obj, lv_event_t event) {
   switch (event) {
     case LV_EVENT_PRESSED:
       rendering = render::INIT_HOME_LASER;
@@ -81,7 +81,7 @@ void view_init::start_btn_cb(lv_obj_t *obj, lv_event_t event) {
   }
 }
 
-void view_init::skip_btn_cb(lv_obj_t *obj, lv_event_t event) {
+void view_init::skip_btn_cb(lv_obj_t* obj, lv_event_t event) {
   switch (event) {
     case LV_EVENT_PRESSED:
       rendering = render::NONE;

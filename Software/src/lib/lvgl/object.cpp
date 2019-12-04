@@ -68,5 +68,4 @@ void object::add_event_callback(lv_event_cb_t action) {
   lv_obj_set_event_cb(get(), action);
 }
 
-
 }  // namespace lvgl

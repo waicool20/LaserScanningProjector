@@ -5,10 +5,10 @@
 #include <lvgl.h>
 #include <lv_core/lv_style.h>
 
-st7735s *ui::_lcd = nullptr;
-nav5 *ui::_nav5 = nullptr;
-lv_indev_t *ui::_input_device = nullptr;
-lv_disp_t *ui::_display = nullptr;
+st7735s* ui::_lcd = nullptr;
+nav5* ui::_nav5 = nullptr;
+lv_indev_t* ui::_input_device = nullptr;
+lv_disp_t* ui::_display = nullptr;
 lv_disp_buf_t ui::disp_buf = lv_disp_buf_t{};
 lv_color_t ui::buf1[LV_HOR_RES_MAX * 10];
 circular_queue<ui::btn_event, 10> ui::btn_events{};
@@ -21,7 +21,7 @@ extern "C" void tim6_dac_isr() {
   }
 }
 
-void ui::init(st7735s *lcd, nav5 *nav5) {
+void ui::init(st7735s* lcd, nav5* nav5) {
   _lcd = lcd;
   _nav5 = nav5;
 
@@ -97,10 +97,10 @@ void ui::init(st7735s *lcd, nav5 *nav5) {
   }
 }
 
-void ui::flush_lcd(_disp_drv_t *disp_drv, const lv_area_t *area, lv_color_t *color_p) {
+void ui::flush_lcd(_disp_drv_t* disp_drv, const lv_area_t* area, lv_color_t* color_p) {
   if (!_lcd->set_window(area->x1, area->y1, area->x2, area->y2)) { return; }
-  for (uint32_t y = area->y1; y <= area->y2; y++) {
-    for (uint32_t x = area->x1; x <= area->x2; x++) {
+  for (auto y = area->y1; y <= area->y2; y++) {
+    for (auto x = area->x1; x <= area->x2; x++) {
       _lcd->send_data(color_p->ch.red);
       _lcd->send_data(color_p->ch.green);
       _lcd->send_data(color_p->ch.blue);
@@ -110,7 +110,7 @@ void ui::flush_lcd(_disp_drv_t *disp_drv, const lv_area_t *area, lv_color_t *col
   lv_disp_flush_ready(disp_drv);
 }
 
-bool ui::nav5_read(_lv_indev_drv_t *indev_drv, lv_indev_data_t *data) {
+bool ui::nav5_read(_lv_indev_drv_t* indev_drv, lv_indev_data_t* data) {
   data->key = btn_events.front().key;
   data->state = btn_events.front().state ? LV_INDEV_STATE_PR : LV_INDEV_STATE_REL;
   btn_events.pop();

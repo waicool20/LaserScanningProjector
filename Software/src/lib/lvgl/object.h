@@ -4,6 +4,9 @@
 
 namespace lvgl {
 
+/**
+ * \brief Abstraction for LVGL screen.
+ */
 class object {
  public:
   explicit object(lv_obj_t* handle) : _handle_(handle) {}

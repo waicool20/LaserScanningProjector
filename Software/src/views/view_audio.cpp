@@ -8,7 +8,7 @@ using namespace std::literals;
 bool view_audio::created = false;
 
 void view_audio::init() {
-  if (created) return;
+  if (created) { return; }
   input_group().add(list());
   list().hidden(true);
   list().size(list().screen().w(), list().screen().h());
@@ -35,48 +35,39 @@ void view_audio::show(bool show) {
   }
 }
 
-lvgl::list &view_audio::list() {
+lvgl::list& view_audio::list() {
   static lvgl::list _list;
   return _list;
 }
 
-lvgl::group &view_audio::input_group() {
+lvgl::group& view_audio::input_group() {
   static lvgl::group _group;
   return _group;
 }
 
-void view_audio::headphones_btn_cb(lv_obj_t * obj, lv_event_t event) {
-  switch(event) {
-    case LV_EVENT_PRESSED:
-      rendering = render::AUDIO_HEADPHONES;
-      break;
+void view_audio::headphones_btn_cb(lv_obj_t* obj, lv_event_t event) {
+  if (event == LV_EVENT_PRESSED) {
+    rendering = render::AUDIO_HEADPHONES;
   }
 }
 
-void view_audio::headphones_xy_btn_cb(lv_obj_t * obj, lv_event_t event) {
-  switch(event) {
-    case LV_EVENT_PRESSED:
-      rendering = render::AUDIO_HEADPHONES_XY;
-      break;
+void view_audio::headphones_xy_btn_cb(lv_obj_t* obj, lv_event_t event) {
+  if (event == LV_EVENT_PRESSED) {
+    rendering = render::AUDIO_HEADPHONES_XY;
   }
 }
 
-void view_audio::mic_btn_cb(lv_obj_t * obj, lv_event_t event) {
-  switch(event) {
-    case LV_EVENT_PRESSED:
-      rendering = render::AUDIO_MIC;
-      break;
+void view_audio::mic_btn_cb(lv_obj_t* obj, lv_event_t event) {
+  if (event == LV_EVENT_PRESSED) {
+    rendering = render::AUDIO_MIC;
   }
 }
 
-
-void view_audio::back_btn_cb(lv_obj_t * obj, lv_event_t event) {
-  switch(event) {
-    case LV_EVENT_PRESSED:
-      show(false);
-      view_main::show(true);
-      rendering = render::NONE;
-      break;
+void view_audio::back_btn_cb(lv_obj_t* obj, lv_event_t event) {
+  if (event == LV_EVENT_PRESSED) {
+    show(false);
+    view_main::show(true);
+    rendering = render::NONE;
   }
 }
 

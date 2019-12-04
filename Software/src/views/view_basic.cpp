@@ -8,7 +8,7 @@ using namespace std::literals;
 bool view_basic::created = false;
 
 void view_basic::init() {
-  if (created) return;
+  if (created) { return; }
   input_group().add(list());
   list().hidden(true);
   list().size(list().screen().w(), list().screen().h());
@@ -36,46 +36,38 @@ void view_basic::show(bool show) {
   }
 }
 
-lvgl::list &view_basic::list() {
+lvgl::list& view_basic::list() {
   static lvgl::list _list;
   return _list;
 }
 
-lvgl::group &view_basic::input_group() {
+lvgl::group& view_basic::input_group() {
   static lvgl::group _group;
   return _group;
 }
 
-void view_basic::rect_btn_cb(lv_obj_t * obj, lv_event_t event) {
-  switch(event) {
-    case LV_EVENT_PRESSED:
-      rendering = render::BASIC_RECT;
-      break;
+void view_basic::rect_btn_cb(lv_obj_t* obj, lv_event_t event) {
+  if (event == LV_EVENT_PRESSED) {
+    rendering = render::BASIC_RECT;
   }
 }
 
-void view_basic::bitmap_btn_cb(lv_obj_t * obj, lv_event_t event) {
-  switch(event) {
-    case LV_EVENT_PRESSED:
-      rendering = render::BASIC_BITMAP;
-      break;
+void view_basic::bitmap_btn_cb(lv_obj_t* obj, lv_event_t event) {
+  if (event == LV_EVENT_PRESSED) {
+    rendering = render::BASIC_BITMAP;
   }
 }
 
-void view_basic::tuple_btn_cb(lv_obj_t * obj, lv_event_t event) {
-  switch(event) {
-    case LV_EVENT_PRESSED:
-      rendering = render::BASIC_TUPLE;
-      break;
+void view_basic::tuple_btn_cb(lv_obj_t* obj, lv_event_t event) {
+  if (event == LV_EVENT_PRESSED) {
+    rendering = render::BASIC_TUPLE;
   }
 }
 
-void view_basic::back_btn_cb(lv_obj_t * obj, lv_event_t event) {
-  switch(event) {
-    case LV_EVENT_PRESSED:
-      rendering = render::NONE;
-      show(false);
-      view_main::show(true);
-      break;
+void view_basic::back_btn_cb(lv_obj_t* obj, lv_event_t event) {
+  if (event == LV_EVENT_PRESSED) {
+    rendering = render::NONE;
+    show(false);
+    view_main::show(true);
   }
 }

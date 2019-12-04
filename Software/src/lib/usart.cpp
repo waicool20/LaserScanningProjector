@@ -30,7 +30,7 @@ uint32_t usart::recv_string_blocking(char* string, uint32_t len) {
   std::uint32_t read;
   for (read = 0; read < len - 1; read++) {
     std::uint8_t data = recv_blocking();
-    if (data == '\n'){
+    if (data == '\n') {
       break;
     }
     string[read] = static_cast<char>(data);
@@ -50,9 +50,9 @@ void usart::send_blocking(std::string_view sv) {
   }
 }
 
-void usart::send_blocking(char *string, uint32_t len) {
+void usart::send_blocking(char* string, uint32_t len) {
   char data;
-  for(uint32_t i = 0; i < len; i++) {
+  for (uint32_t i = 0; i < len; i++) {
     data = string[i];
     if (data == '\0') {
       send_blocking('\n');

@@ -26,7 +26,7 @@ headphones::headphones() {
 
     _left_ch.setup(GPIO_MODE_ANALOG, GPIO_PUPD_NONE);
     _right_ch.setup(GPIO_MODE_ANALOG, GPIO_PUPD_NONE);
-    
+
     adc_enable_regulator(_adc);
     systick::sleep_ms(5);
 
@@ -59,7 +59,7 @@ headphones::headphones() {
 }
 
 void headphones::enable() {
-  if (enabled) return;
+  if (enabled) { return; }
   adc_enable_dma(_adc);
   dma_enable_channel(_dma, _dma_channel);
 
@@ -70,7 +70,7 @@ void headphones::enable() {
 }
 
 void headphones::disable() {
-  if (!enabled) return;
+  if (!enabled) { return; }
   adc_power_off(_adc);
   dma_disable_channel(_dma, _dma_channel);
   enabled = false;

@@ -89,18 +89,6 @@ void resize_keep_ratio(cv::Mat& src, cv::Mat& dest, const cv::Size& target) {
 
   const auto scale = std::min(x_scale, y_scale);
   cv::resize(src, dest, cv::Size(src.cols * scale, src.rows * scale), scale, scale);
-
-  // Padding-related stuff
-  /*const auto x_padding = (target.width - src.cols) / 2;
-  const auto y_padding = (target.height - src.rows) / 2;
-
-  cv::copyMakeBorder(dest, dest, y_padding, y_padding, x_padding, x_padding, cv::BORDER_CONSTANT, cv::Scalar(255));
-
-  cv::Mat padded;
-  padded.create(src.rows + y_padding * 2, src.cols + x_padding * 2, src.type());
-  padded.setTo(cv::Scalar::all(0));
-  src.copyTo(padded(cv::Rect(x_padding, y_padding, src.cols, src.rows)));
-  padded.copyTo(src);*/
 }
 
 int main(int argc, char* argv[]) {
@@ -162,21 +150,6 @@ int main(int argc, char* argv[]) {
       } else {
         break;
       }
-
-      // NumContour-based Limit
-      /*if (contours.size() == lines_thresh) {
-        break;
-      } else if (std::fabs(bounds.second - bounds.first) <= 1.0f) {
-        break;
-      } else if (bounds.second == lowThreshold || bounds.first == max_lowThreshold) {
-        break;
-      }
-
-      if (contours.size() < lines_thresh) {
-        bounds.second = (bounds.first + bounds.second) / 2;
-      } else if (contours.size() > lines_thresh) {
-        bounds.first = (bounds.first + bounds.second) / 2;
-      }*/
     }
 
     std::vector<double> distances(contours.size());
@@ -200,15 +173,6 @@ int main(int argc, char* argv[]) {
         tuples.emplace_back(p);
       }
     }
-
-    /*cv::Mat drawing = cv::Mat::zeros(detected_edges.size(), CV_8UC3);
-    for (size_t i = 0; i < contours.size(); i++) {
-      drawContours(drawing, contours, int(i), cv::Scalar(255, 255, 255), 1, cv::LINE_8, hierarchy, 0);
-    }
-
-    cv::imshow("Contour", drawing);
-    cv::waitKey(0);
-    return 0*/;
   }
 
   libusb_check_error(libusb_init(nullptr), __func__);

@@ -10,10 +10,26 @@
 
 class usb_cdcacm {
  public:
+  /**
+   * \brief Polls the USB for data.
+   */
   void poll();
 
+  /**
+   * \return Whether a tuple is waiting for service.
+   */
   bool tuple_present() const;
+  /**
+   * \brief Adds the tuple for handling.
+   *
+   * \param tuple newly received tuple
+   */
   void tuple_push(laser_canvas::tuple tuple);
+  /**
+   * \brief Consumes and returns the tuple.
+   *
+   * \return The cached tuple.
+   */
   laser_canvas::tuple tuple_pop();
 
   static usb_cdcacm& instance();

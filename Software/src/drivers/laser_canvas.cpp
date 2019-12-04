@@ -192,10 +192,10 @@ void laser_canvas::draw_magnitude_xy(float magnitude_x, float magnitude_y) {
 }
 
 void laser_canvas::resize(uint32_t w, uint32_t h) {
-  if (_width == w && _height == h) return;
-  current_x += (int32_t(w) - int32_t(_width)) / 2; // Remap width
+  if (_width == w && _height == h) { return; }
+  current_x += (std::int32_t(w) - std::int32_t(_width)) / 2L; // Remap width
   _width = w;
-  current_y += (int32_t(h) - int32_t(_height)) / 2; // Remap height
+  current_y += (std::int32_t(h) - std::int32_t(_height)) / 2L; // Remap height
   _height = h;
 }
 
